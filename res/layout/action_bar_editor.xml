@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/worn_red"
+    android:background="@drawable/eyewitness_blue"
     android:weightSum="1" >
 
     <ImageButton
@@ -33,6 +33,6 @@
         android:layout_width="match_parent"
         android:layout_height="6dip"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/rusted_red" />
+        android:background="@drawable/eyewitness_blue" />
 
 </RelativeLayout>

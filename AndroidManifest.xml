@@ -2,7 +2,7 @@
     package="org.witness.iwitness"
     android:installLocation="preferExternal"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="beta1-build1" >
 
     <uses-sdk
         android:minSdkVersion="10"

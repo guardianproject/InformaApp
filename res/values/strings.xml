@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="app_name">iWitness</string>
+    <string name="app_name">eyeWitness</string>
 	<string name="photo">Photo</string>
 	<string name="video">Video</string>
 	<string name="menu_all_media">All Media</string>

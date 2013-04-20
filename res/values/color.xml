@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <drawable name="white">#fff0f1f1</drawable>
-    <drawable name="worn_red">#ffea3f3f</drawable>
-    <drawable name="rusted_red">#ffc03d2c</drawable>
+   
     <drawable name="black">#ff383838</drawable>
     <drawable name="grey">#ffd0d2d3</drawable>
     <drawable name="peuter">#ff6d6d6d</drawable>
     <drawable name="trans_grey_1">#80ffffff</drawable>
     <drawable name="trans_black">#80000000</drawable>
     <drawable name="blue">#ff09bdff</drawable>
+    <drawable name="eyewitness_blue">#ff4db1e4</drawable>
+    <drawable name="eyewitness_dark_grey">#ff231f20</drawable>
+    <drawable name="eyewitness_light_grey">#ff818285</drawable>
+    
+    
 </resources>

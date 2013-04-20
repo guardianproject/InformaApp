@@ -3,16 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/rusted_red"
-    android:paddingLeft="20dip"
-    android:paddingRight="20dip"
-    android:paddingTop="60dip" >
-    <TextView style="@style/iwitness_h1"
+    android:background="#231f20"
+    android:paddingLeft="0dip"
+    android:paddingRight="0dip"
+    android:paddingTop="0dip" >
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
         android:gravity="center"
-        android:layout_marginBottom="16dip" />
+        android:src="@drawable/splash"
+        />
     <ProgressBar
         android:id="@+id/login_waiter"
         android:layout_width="wrap_content"

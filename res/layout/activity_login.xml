@@ -3,23 +3,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/rusted_red"
-    android:paddingLeft="20dip"
-    android:paddingRight="20dip"
+    android:background="@drawable/eyewitness_blue"
+    android:paddingLeft="0dip"
+    android:paddingRight="0dip"
     android:paddingTop="60dip" >
-    <TextView style="@style/iwitness_h1"
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:gravity="center"
-        android:layout_marginBottom="16dip" />
+        android:layout_height="100dp"
+        android:gravity="top|center"
+        android:src="@drawable/ic_launcher"
+        />
     <EditText
         android:id="@+id/login_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:hint="@string/password"
         android:layout_marginBottom="10dip"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:textColor="@drawable/white"
+        android:textColorHighlight="@drawable/white"
+         />
     <Button
         android:id="@+id/login_commit"
         android:layout_width="wrap_content"

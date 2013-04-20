@@ -4,3 +4,4 @@ bin/*
 .classpath
 project.properties
 assets/includedOrganizations/*
+.settings/*
