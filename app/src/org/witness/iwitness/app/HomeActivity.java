@@ -4,6 +4,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import net.hockeyapp.android.CrashManager;
+import net.hockeyapp.android.UpdateManager;
+
 import org.witness.informacam.InformaCam;
 import org.witness.informacam.ui.CameraActivity;
 import org.witness.informacam.utils.Constants.Models;
@@ -125,11 +128,15 @@ public class HomeActivity extends SherlockFragmentActivity implements HomeActivi
 		fragments.add(cameraFragment);
 
 		init = getIntent();
+		
+		checkForUpdates();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
+		
+		 checkForCrashes();
 
 		Log.d(LOG, packageName + " activity is getting informa instance");
 		informaCam = InformaCam.getInstance(HomeActivity.this);
@@ -483,4 +490,16 @@ public class HomeActivity extends SherlockFragmentActivity implements HomeActivi
 		// TODO Auto-generated method stub
 
 	}
+	
+	private final static String HOCKEY_APP_ID = "819d2172183272c9d84cd3a4dbd9296b";
+	
+	 private void checkForCrashes() {
+	   CrashManager.register(this, HOCKEY_APP_ID);
+	 }
+
+	 private void checkForUpdates() {
+	   // Remove this for store builds!
+	   UpdateManager.register(this, HOCKEY_APP_ID);
+	 }
+
 }

@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.witness.iwitness"
     android:installLocation="preferExternal"
-    android:versionCode="4"
-    android:versionName="beta1-build4" >
+    android:versionCode="5"
+    android:versionName="beta1-build5" >
 
     <uses-sdk
         android:minSdkVersion="10"
