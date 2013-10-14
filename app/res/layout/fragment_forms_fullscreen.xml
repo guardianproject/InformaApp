@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/details_form_root"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:minHeight="1000dp"
-    android:layout_marginLeft="6dip"
-    android:layout_marginRight="6dip"
-    android:orientation="vertical"
-    android:id="@+id/details_form_root" />
+    android:layout_height="wrap_content" >
+
+    <LinearLayout
+        android:id="@+id/details_form_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@color/blue_washed"
+        android:dividerHeight="1px"
+        android:dividerPadding="10dp"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:showDividers="middle" />
+
+</ScrollView>

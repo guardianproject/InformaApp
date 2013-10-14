@@ -1,39 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/RelativeLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/extras_popup_background_rounded"
+        android:padding="20dp" >
 
-    <TabHost
-        android:id="@android:id/tabhost"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dip" >
+        <TextView
+            android:id="@+id/tvTitleShareOrg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/share_secure"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical" >
+        <ListView
+            android:id="@+id/lvItemsOrg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvTitleShareOrg"
+            android:layout_marginTop="10dp" >
+        </ListView>
 
-            <TabWidget
-                android:id="@android:id/tabs"
-                style="@style/iwitness_sub_tab_holder"
-                android:layout_width="fill_parent"
-                android:layout_height="56dip"
-                android:orientation="horizontal" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_alignLeft="@+id/tvTitleShareOrg"
+            android:layout_below="@+id/tvTitleShareOrg"
+            android:background="@android:color/black" />
 
-            <FrameLayout
-                android:id="@android:id/tabcontent"
-                android:layout_width="match_parent"
-                android:layout_height="0dip"
-                android:layout_weight="1"
-                android:background="@drawable/white" />
-        </LinearLayout>
-    </TabHost>
+        <TextView
+            android:id="@+id/tvTitleShare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/lvItemsOrg"
+            android:text="@string/share"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <include
-        android:id="@+id/share_in_progress_root"
-        android:visibility="gone"
-        layout="@layout/popup_share_in_progress" />
+        <ListView
+            android:id="@+id/lvItems"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvTitleShare"
+            android:layout_marginTop="10dp" >
+        </ListView>
 
-</LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_alignLeft="@+id/tvTitleShare"
+            android:layout_below="@+id/tvTitleShare"
+            android:background="@android:color/black" />        
+        
+        <include
+            android:id="@+id/share_in_progress_root"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvTitleShareOrg"
+            android:layout_marginTop="10dp"
+            layout="@layout/popup_share_in_progress"
+            android:visibility="gone" />
+        
+    </RelativeLayout>

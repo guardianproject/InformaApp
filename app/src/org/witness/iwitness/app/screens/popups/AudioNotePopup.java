@@ -64,7 +64,7 @@ public class AudioNotePopup extends Popup implements OnClickListener, OnCompleti
 		playRes = R.drawable.ic_audio_play;
 
 		progress = (ODKSeekBar) layout.findViewById(R.id.audio_seekbar);
-		
+
 		actionRedo = (Button) layout.findViewById(R.id.audio_action_redo);
 		actionRedo.setOnClickListener(this);
 				
@@ -140,7 +140,7 @@ public class AudioNotePopup extends Popup implements OnClickListener, OnCompleti
 				if(progress.rawAudioData == null) {
 					// record
 					progress.record();
-					state = RecorderState.IS_RECORDING;
+					setState(RecorderState.IS_RECORDING);
 				} else {
 					if(state != RecorderState.IS_IDLE) {
 						if(state == RecorderState.IS_RECORDING) {
@@ -148,19 +148,19 @@ public class AudioNotePopup extends Popup implements OnClickListener, OnCompleti
 						} else if(state == RecorderState.IS_PLAYING) {
 							progress.pause();
 						}
-						state = RecorderState.IS_IDLE;
+						setState(RecorderState.IS_IDLE);
 					}
 					
 					res = pauseRes;
 					
 					progress.play();
-					state = RecorderState.IS_PLAYING;
+					setState(RecorderState.IS_PLAYING);
 				}
 				
 				break;
 			case RecorderState.IS_RECORDING:
 				progress.stop();
-				state = RecorderState.IS_IDLE;
+				setState(RecorderState.IS_IDLE);
 				
 				res = recordRes;
 				
@@ -171,7 +171,7 @@ public class AudioNotePopup extends Popup implements OnClickListener, OnCompleti
 				res = recordRes;
 				
 				progress.pause();
-				state = RecorderState.IS_IDLE;
+				setState(RecorderState.IS_IDLE);
 				v.performClick();
 				break;
 			}
@@ -181,7 +181,7 @@ public class AudioNotePopup extends Popup implements OnClickListener, OnCompleti
 			} else if(state == RecorderState.IS_RECORDING) {
 				progress.stop();
 			}
-			state = RecorderState.IS_IDLE;
+			setState(RecorderState.IS_IDLE);
 			
 			form.answer(Forms.FreeAudio.PROMPT);
 			cancel();
@@ -209,7 +209,7 @@ public class AudioNotePopup extends Popup implements OnClickListener, OnCompleti
 		progress.pause();
 		mp.seekTo(0);
 		
-		state = RecorderState.IS_IDLE;
+		setState(RecorderState.IS_IDLE);
 	}
 
 	@Override
@@ -218,4 +218,17 @@ public class AudioNotePopup extends Popup implements OnClickListener, OnCompleti
 		
 	}
 
+	private void setState(int newState)
+	{
+		state = newState;
+		onStateChanged();
+	}
+	
+	/**
+	 * Override this to handle state changes
+	 */
+	protected void onStateChanged()
+	{
+		
+	}
 }

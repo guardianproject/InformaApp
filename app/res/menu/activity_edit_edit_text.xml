@@ -1,0 +1,4 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_edittext_cancel" android:title="@string/cancel" android:orderInCategory="100" android:showAsAction="always" android:enabled="true"/>
+    <item android:id="@+id/menu_edittext_save" android:title="@string/editor_save_text" android:orderInCategory="101" android:showAsAction="always" android:enabled="true"/>
+</menu>

@@ -29,6 +29,7 @@
 	<string name="swipe_left_for_cameras">Swipe left for cameras.</string>
 	<string name="all_media">All Media</string>
 	<string name="share">Share</string>
+	<string name="share_secure">Secure Share</string>
 	<string name="add_a_quick_note">Add a quick note \u2026</string>
 	<string name="untitled">Untitled</string>
 	<string name="x_tags">%1$d Tag%2$s</string>
@@ -47,6 +48,7 @@
 	<string name="send_message">Send message\u2026</string>
 	<string name="notes">Notes</string>
 	<string name="delete_tag">Delete Tag</string>
+	<string name="delete_audio_note">Delete Audio Note</string>
 	<string name="unverified">Unverified</string>
 	<string name="verified">Verified</string>
 	<string name="pull_down_to_wipe">Pull down to wipe your contents</string>
@@ -58,9 +60,21 @@
 	<string name="play">Play</string>
 	<string name="resend_credentials">Resend my credentials \u2026</string>
 	<string name="retry">Retry</string>
-
+	<string name="safely_storing_your_picture">Safely storing your picture</string>
+	
+	<string name="login_open">Open</string>
+	<string name="login_passphrase">Passphrase</string>
+	
 	<string name="preferences">Preferences</string>
-    <string name="prefs_language_title">Language</string>
+	<string name="prefs_images_deleted">Deleted</string>
+	<string name="prefs_images_saved">Saved</string>
+	<string name="prefs_lock_screen">Lock screen</string>
+	<string name="prefs_lock_screen_on">On</string>
+	<string name="prefs_lock_screen_off">Off</string>
+	<string name="prefs_panic">Panic Action</string>
+	<string name="prefs_panic_wipe_app">Delete entire app</string>
+	<string name="prefs_panic_wipe_content">Delete my content</string>
+	<string name="prefs_language_title">Language</string>
     <string name="pref_languages_default">System Default</string>
     <string name="pref_languages_en_us">English (US)</string>
     <string name="pref_languages_fr">French</string>
@@ -71,4 +85,62 @@
     <string name="pref_languages_pt_PT">Portuguese (Portugal)</string>
     <string name="pref_languages_si_LK">Sinhala (Sri Lanka)</string>
     <string name="pref_languages_tr_TR">Turkish (Turkey)</string>
+    
+    <string name="menu_share">Share</string>
+    <string name="menu_edit">Edit</string>
+    <string name="menu_done">Done</string>
+    <string name="menu_save">Save</string>
+    <string name="menu_view">View</string>
+    <string name="menu_select">Select</string>
+    <string name="menu_panic">Panic</string>
+    <string name="menu_settings">Settings</string>
+
+    <string name="wizard_welcome">Welcome!</string>
+    <string name="wizard_choose_language">Choose a language:</string>
+    <string name="wizard_get_started">Get started</string>
+    <string name="wizard_step_1_of_2">Step 1 of 2:</string>
+    <string name="wizard_create_db">Set up your secure database.</string>
+    <string name="wizard_email_optional">Email (optional)</string>
+    <string name="wizard_password_dont_match">Passwords do not match =(</string>
+    <string name="wizard_password_wrong_format">Your password should be more than 10 characters.</string>
+    
+    <string name="wizard_ok_next">Okay, next</string>
+    <string name="wizard_step_2_of_2">Step 2 of 2:</string>
+    <string name="wizard_take_photo_title">Take 6 boring photos to generate your device key.</string>
+    <string name="wizard_key_information">Your key will allow you to be verified by IBA, so that you can share seamlessly and securely.</string>
+    <string name="wizard_take_photo">Take Photos</string>
+    <string name="wizard_take_photo_take">Take</string>
+    <string name="wizard_key_is_being_made">Your key is being made, this may take a while.</string>
+    <string name="wizard_key_made">Your key has been made.</string>
+    
+    <string name="home_audio_note">AUDIO NOTE</string>
+    <string name="home_share">SHARE</string>
+    <string name="home_gallery_title">Gallery</string>
+    <string name="home_gallery_selected">%1$d Selected</string>
+    <string name="home_gallery_delete">Delete</string>
+    <string name="home_gallery_empty">Your gallery is empty.</string>
+	<string name="home_swipe_for_more">Swipe for more</string>
+
+    <string name="editor_tags_form">Add Info</string>
+    <string name="editor_tags_add">Add Tags</string>
+    <string name="editor_form_edit">Tag Info</string>
+    <string name="editor_write_text">Write Text</string>
+	<string name="editor_save_text">SAVE TEXT</string>
+	    
+    <string name="audio_saved_saved">Recording saved.</string>
+    <string name="audio_saved_info">Audio notes are for your reference only, and will not be shared with IBA.</string>
+    <string name="audio_saved_ok">OKAY, THANKS!</string>
+    
+    <string name="shared_never">Never shared</string>
+    <string name="shared_recently">Shared less than a minute ago</string>
+    <string name="shared_minutes">Shared %1$d minutes ago</string>
+    <string name="shared_minute">Shared %1$d minute ago</string>
+    <string name="shared_hours">Shared %1$d hours ago</string>
+    <string name="shared_hour">Shared %1$d hour ago</string>
+    <string name="shared_days">Shared %1$d days ago</string>
+    <string name="shared_day">Shared %1$d day ago</string>
+    
+    <string name="sort_date">Date</string>
+    <string name="sort_photos">Photos</string>
+    <string name="sort_videos">Videos</string>
 </resources>

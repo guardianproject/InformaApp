@@ -1,0 +1,4 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_settings" android:title="@string/menu_settings" android:orderInCategory="100" android:icon="@drawable/ic_home_pref" android:showAsAction="always" android:enabled="true"/>
+    <item android:id="@+id/menu_panic" android:title="@string/menu_panic" android:orderInCategory="101" android:icon="@drawable/ic_home_wipe" android:showAsAction="always" android:enabled="true"/>
+</menu>

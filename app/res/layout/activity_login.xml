@@ -1,41 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/blue_dark"
     android:orientation="vertical"
-    android:background="@drawable/eyewitness_blue"
     android:paddingLeft="0dip"
     android:paddingRight="0dip"
-    android:paddingTop="60dip" >
+    android:paddingTop="60dip"
+    android:descendantFocusability="beforeDescendants"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    >
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:gravity="top|center"
-        android:src="@drawable/ic_launcher"
-        />
-    <EditText
-        android:id="@+id/login_password"
+        android:src="@drawable/ic_launcher" />
+
+    <LinearLayout
+        android:id="@+id/llInputFields"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:hint="@string/password"
-        android:layout_marginBottom="10dip"
-        android:inputType="textPassword"
-        android:textColor="@drawable/white"
-        android:textColorHighlight="@drawable/white"
-         />
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/wizard_rounded_background"
+        android:orientation="vertical"
+        android:padding="10dp" >
+
+        <org.witness.iwitness.app.views.CustomFontEditText
+            android:id="@+id/login_password"
+            style="@style/WizardEdittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/login_passphrase"
+            android:inputType="textPassword"
+            android:maxLength="50" />
+
+    </LinearLayout>
+
     <Button
         android:id="@+id/login_commit"
-        android:layout_width="wrap_content"
+        style="@style/BlueRoundedButton"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/get_in"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/login_open" />
+
     <ProgressBar
         android:id="@+id/login_waiter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="20dp"
         android:visibility="gone" />
-    
 
 </LinearLayout>

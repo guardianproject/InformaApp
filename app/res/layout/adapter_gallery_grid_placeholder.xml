@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.witness.iwitness.app.views.SquareFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/gallery_thumb_holder"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="false"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    android:padding="3dip" >
+
+    <FrameLayout
+        android:id="@+id/flPlaceholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/gallery_placeholder_background" >
+
+        <ProgressBar
+            android:id="@+id/pgLoading"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:indeterminate="true" />
+
+    </FrameLayout>
+
+</org.witness.iwitness.app.views.SquareFrameLayout>

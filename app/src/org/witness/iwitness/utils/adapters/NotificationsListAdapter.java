@@ -7,9 +7,9 @@ import java.util.List;
 import org.witness.informacam.InformaCam;
 import org.witness.informacam.models.notifications.INotification;
 import org.witness.informacam.utils.Constants.App;
+import org.witness.informacam.utils.Constants.App.Storage.Type;
 import org.witness.informacam.utils.Constants.Logger;
 import org.witness.informacam.utils.Constants.Models;
-import org.witness.informacam.utils.Constants.App.Storage.Type;
 import org.witness.informacam.utils.TimeUtility;
 import org.witness.iwitness.R;
 
@@ -31,28 +31,34 @@ public class NotificationsListAdapter extends BaseAdapter {
 	
 	public NotificationsListAdapter(List<INotification> notifications) {
 		this.notifications = notifications;
-		Collections.sort(this.notifications, new Comparator<INotification>() {
+		if (this.notifications != null)
+		{
+			Collections.sort(this.notifications, new Comparator<INotification>() {
 
-			@Override
-			public int compare(INotification n1, INotification n2) {
-				return n1.timestamp > n2.timestamp ? -1 : (n1==n2 ? 0 : 1);
-			}
+				@Override
+				public int compare(INotification n1, INotification n2) {
+					return n1.timestamp > n2.timestamp ? -1 : (n1==n2 ? 0 : 1);
+				}
 			
-		});
+			});
 		
-		Log.d(LOG, "NUM NOTIFICATIONS: " + this.notifications.size());
+			Log.d(LOG, "NUM NOTIFICATIONS: " + this.notifications.size());
+		}
 	}
 	
 	public void update(List<INotification> newNotifications, Activity a) {
 		notifications = newNotifications;
-		Collections.sort(notifications, new Comparator<INotification>() {
+		if (notifications != null)
+		{
+			Collections.sort(notifications, new Comparator<INotification>() {
 
-			@Override
-			public int compare(INotification n1, INotification n2) {
-				return n1.timestamp > n2.timestamp ? -1 : (n1==n2 ? 0 : 1);
-			}
+				@Override
+				public int compare(INotification n1, INotification n2) {
+					return n1.timestamp > n2.timestamp ? -1 : (n1==n2 ? 0 : 1);
+				}
 			
-		});
+			});
+		}
 		
 		a.runOnUiThread(new Runnable() {
 			@Override
@@ -85,6 +91,8 @@ public class NotificationsListAdapter extends BaseAdapter {
 	
 	@Override
 	public int getCount() {
+		if (notifications == null)
+			return 0;
 		return notifications.size();
 	}
 

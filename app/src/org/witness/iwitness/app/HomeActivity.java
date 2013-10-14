@@ -1,5 +1,6 @@
 package org.witness.iwitness.app;
 
+import info.guardianproject.odkparser.widgets.ODKSeekBar.OnMediaRecorderStopListener;
 import info.guardianproject.onionkit.ui.OrbotHelper;
 
 import java.util.Iterator;
@@ -24,9 +25,10 @@ import org.witness.informacam.utils.InformaCamBroadcaster.InformaCamStatusListen
 import org.witness.iwitness.R;
 import org.witness.iwitness.app.screens.CameraFragment;
 import org.witness.iwitness.app.screens.GalleryFragment;
+import org.witness.iwitness.app.screens.HomeFragment;
 import org.witness.iwitness.app.screens.UserManagementFragment;
 import org.witness.iwitness.app.screens.menus.MediaActionMenu;
-import org.witness.iwitness.app.screens.popups.RenamePopup;
+import org.witness.iwitness.app.screens.popups.PopupClickListener;
 import org.witness.iwitness.app.screens.popups.SharePopup;
 import org.witness.iwitness.app.screens.popups.TextareaPopup;
 import org.witness.iwitness.utils.Constants;
@@ -41,6 +43,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -51,81 +54,97 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
+import android.widget.PopupWindow;
 import android.widget.Toast;
-import android.widget.LinearLayout.LayoutParams;
-import android.widget.TabHost;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 @SuppressLint("HandlerLeak")
-public class HomeActivity extends SherlockFragmentActivity implements HomeActivityListener, InformaCamStatusListener, InformaCamEventListener, ListAdapterListener {
+public class HomeActivity extends SherlockFragmentActivity implements HomeActivityListener, InformaCamStatusListener, InformaCamEventListener,
+		ListAdapterListener, OnMediaRecorderStopListener
+{
 	Intent init, route;
+
 	private final static String LOG = Constants.App.Home.LOG;
+
+	private static final int INDEX_MAIN = 0;
+	private static final int INDEX_GALLERY = 2;
+
 	private String lastLocale = null;
 
 	List<Fragment> fragments = new Vector<Fragment>();
+	HomeFragment mainFragment;
 	Fragment userManagementFragment, galleryFragment, cameraFragment;
 
 	boolean initGallery = false;
 
 	int visibility = View.VISIBLE;
 
-	LayoutInflater li;
-	TabHost tabHost;
 	ViewPager viewPager;
 	TabPager pager;
 
 	InformaCam informaCam;
 
 	MediaActionMenu mam;
-//	WaitPopup waiter;
+	// WaitPopup waiter;
 
 	Intent toEditor, toCamera;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 
 		informaCam = (InformaCam)getApplication();		
 		
 		setContentView(R.layout.activity_home);
 
-		try {
+		try
+		{
 			Iterator<String> i = savedInstanceState.keySet().iterator();
-			while(i.hasNext()) {
+			while (i.hasNext())
+			{
 				String outState = i.next();
-				if(outState.equals(Home.TAG) && savedInstanceState.getBoolean(Home.TAG)) {
+				if (outState.equals(Home.TAG) && savedInstanceState.getBoolean(Home.TAG))
+				{
 					initGallery = true;
 				}
 			}
-		} catch(NullPointerException e) {}
+		}
+		catch (NullPointerException e)
+		{
+		}
 
 		toEditor = new Intent(this, EditorActivity.class);
 		toCamera = new Intent(this, CameraActivity.class);
 		route = null;
 
+		mainFragment = (HomeFragment) Fragment.instantiate(this, HomeFragment.class.getName());
 		userManagementFragment = Fragment.instantiate(this, UserManagementFragment.class.getName());
 		galleryFragment = Fragment.instantiate(this, GalleryFragment.class.getName());
 		cameraFragment = Fragment.instantiate(this, CameraFragment.class.getName());
 
+		fragments.add(mainFragment);
 		fragments.add(userManagementFragment);
 		fragments.add(galleryFragment);
 		fragments.add(cameraFragment);
 
 		init = getIntent();
-		
+
 		initLayout();
 		checkForUpdates();
+		launchMain();
 	}
 
 	@Override
-	public void onResume() {
+	public void onResume()
+	{
 		super.onResume();
 		
 		informaCam.setStatusListener(this);
@@ -135,19 +154,27 @@ public class HomeActivity extends SherlockFragmentActivity implements HomeActivi
 		if(getIntent().hasExtra(Constants.Codes.Extras.CHANGE_LOCALE)) {
 			getIntent().removeExtra(Constants.Codes.Extras.CHANGE_LOCALE);
 		}
-		
+		if (getIntent().hasExtra(Constants.Codes.Extras.GENERATING_KEY)) {
+			mainFragment.setIsGeneratingKey(getIntent().getBooleanExtra(Constants.Codes.Extras.GENERATING_KEY, false));
+			getIntent().removeExtra(Constants.Codes.Extras.GENERATING_KEY);
+		} else {
+			mainFragment.setIsGeneratingKey(false);
+		}
+
 		String currentLocale = PreferenceManager.getDefaultSharedPreferences(this).getString(Preferences.Keys.LANGUAGE, "0");
-		
-		if(lastLocale != null && !lastLocale.equals(currentLocale)) {
+
+		if (lastLocale != null && !lastLocale.equals(currentLocale))
+		{
 			setNewLocale(currentLocale);
 			return;
 		}
-		
+
 		checkForCrashes();
 
-		informaCam = (InformaCam)getApplication();
+		informaCam = (InformaCam) getApplication();
 
-		if(init.getData() != null) {
+		if (init.getData() != null)
+		{
 			final Uri ictdURI = init.getData();
 
 			mHandlerUI.post(new Runnable() {
@@ -156,124 +183,100 @@ public class HomeActivity extends SherlockFragmentActivity implements HomeActivi
 					IOrganization organization = informaCam.installICTD(ictdURI, mHandlerUI, HomeActivity.this);
 					if(organization != null) {
 						viewPager.setCurrentItem(0);
-					} else {
+					}
+					else
+					{
 						Toast.makeText(HomeActivity.this, getString(org.witness.informacam.R.string.could_not_import_ictd), Toast.LENGTH_LONG).show();
 					}
 				}
 			});
-			
-			
+
 		}
 	}
-	
-	private void setNewLocale(String locale_code) {
+
+	private void setNewLocale(String locale_code)
+	{
 		Configuration configuration = new Configuration();
 		configuration.locale = new Locale(informaCam.languageMap.getCode(Integer.parseInt(locale_code)));
-		
+
 		getBaseContext().getResources().updateConfiguration(configuration, getBaseContext().getResources().getDisplayMetrics());
-		
+
 		getIntent().putExtra(Constants.Codes.Extras.CHANGE_LOCALE, true);
 		setResult(Activity.RESULT_OK, new Intent().putExtra(Constants.Codes.Extras.CHANGE_LOCALE, true));
 		finish();
 	}
 
-	private void initLayout() {
+	private void initLayout()
+	{
 		pager = new TabPager(getSupportFragmentManager());
 
 		viewPager = (ViewPager) findViewById(R.id.view_pager_root);
 		viewPager.setAdapter(pager);
 		viewPager.setOnPageChangeListener(pager);
 
-		li = LayoutInflater.from(this);
-
-		int[] dims = getDimensions();
-
-		tabHost = (TabHost) findViewById(android.R.id.tabhost);
-		tabHost.setup();
-
-		TabHost.TabSpec tab = tabHost.newTabSpec(UserManagementFragment.class.getName()).setIndicator(generateTab(li, R.layout.tabs_user_management));
-		li.inflate(R.layout.fragment_home_user_management, tabHost.getTabContentView(), true);
-		tab.setContent(R.id.user_management_root_view);
-		tabHost.addTab(tab);
-
-		tab = tabHost.newTabSpec(GalleryFragment.class.getName()).setIndicator(generateTab(li, R.layout.tabs_iwitness));
-		li.inflate(R.layout.fragment_home_gallery, tabHost.getTabContentView(), true);
-		tab.setContent(R.id.gallery_root_view);
-		tabHost.addTab(tab);
-
-		tab = tabHost.newTabSpec(CameraFragment.class.getName()).setIndicator(generateTab(li, R.layout.tabs_camera_chooser));
-		li.inflate(R.layout.fragment_home_camera_chooser, tabHost.getTabContentView(), true);
-		tab.setContent(R.id.camera_chooser_root_view);
-		tabHost.addTab(tab);
-
-		tabHost.setOnTabChangedListener(pager);
-
-		for(int i=0; i<tabHost.getTabWidget().getChildCount(); i++) {
-			View tab_ = tabHost.getTabWidget().getChildAt(i);
-			if(i == 1) {
-				tab_.setLayoutParams(new LinearLayout.LayoutParams((int) (dims[0] * 0.5), LayoutParams.MATCH_PARENT));
-			} else {
-				tab_.setLayoutParams(new LinearLayout.LayoutParams((int) (dims[0] * 0.25), LayoutParams.MATCH_PARENT));
-			}
-		}
-
-		viewPager.setCurrentItem(1);
-	}
-
-	private static View generateTab(final LayoutInflater li, final int resource) {
-		return li.inflate(resource, null);
+		launchMain();
 	}
 
 	@Override
-	public void onSaveInstanceState(Bundle outState) {
+	public void onSaveInstanceState(Bundle outState)
+	{
 		outState.putBoolean(Home.TAG, true);
 
 		super.onSaveInstanceState(outState);
 	}
 
 	@Override
-	public void onPause() {
+	public void onPause()
+	{
 		super.onPause();
 	}
 
 	@Override
-	public void onDestroy() {
+	public void onDestroy()
+	{
 		super.onDestroy();
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public int[] getDimensions() {
+	public int[] getDimensions()
+	{
 		Display display = getWindowManager().getDefaultDisplay();
-		return new int[] {display.getWidth(),display.getHeight()};
-	}
-
-	public void launchCamera() {
-		
-		route = toCamera;
-
-	//	waiter = new WaitPopup(this);
-		informaCam.startInforma();
+		return new int[] { display.getWidth(), display.getHeight() };
 	}
 
 	@Override
-	public void launchEditor(IMedia media) {
+	public void launchCamera() {
+		resetActionBar();
+		toCamera.removeExtra(org.witness.informacam.utils.Constants.Codes.Extras.CAMERA_TYPE);
+		//toCamera.putExtra(
+		//		 org.witness.informacam.utils.Constants.Codes.Extras.CAMERA_TYPE,
+		//		 org.witness.informacam.utils.Constants.App.Camera.Type.CAMERA);
+		route = toCamera;
+		routeUs();
+	}
+
+	@Override
+	public void launchEditor(IMedia media)
+	{
 		toEditor.putExtra(Codes.Extras.EDIT_MEDIA, media._id);
 
 		route = toEditor;
-	//	waiter = new WaitPopup(this);
-		informaCam.startInforma();
+		routeUs();
 	}
 
 	@Override
-	public void getContextualMenuFor(final INotification notification) {
+	public void getContextualMenuFor(final INotification notification)
+	{
 		List<ContextMenuAction> actions = new Vector<ContextMenuAction>();
 
 		ContextMenuAction action = new ContextMenuAction();
 		action.label = getResources().getString(R.string.delete);
-		action.ocl = new OnClickListener() {
+		action.ocl = new OnClickListener()
+		{
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v)
+			{
 				mam.cancel();
 				informaCam.notificationsManifest.getById(notification._id).delete();
 
@@ -281,13 +284,16 @@ public class HomeActivity extends SherlockFragmentActivity implements HomeActivi
 			}
 		};
 		actions.add(action);
-		
-		if(notification.canRetry) {
+
+		if (notification.canRetry)
+		{
 			action = new ContextMenuAction();
 			action.label = getResources().getString(R.string.retry);
-			action.ocl = new OnClickListener() {
+			action.ocl = new OnClickListener()
+			{
 				@Override
-				public void onClick(View v) {
+				public void onClick(View v)
+				{
 					mam.cancel();
 					notification.retry();
 				}
@@ -300,39 +306,45 @@ public class HomeActivity extends SherlockFragmentActivity implements HomeActivi
 	}
 
 	@Override
-	public void getContextualMenuFor(final IOrganization organization) {
+	public void getContextualMenuFor(final IOrganization organization)
+	{
 		List<ContextMenuAction> actions = new Vector<ContextMenuAction>();
 
 		ContextMenuAction action = new ContextMenuAction();
 		action.label = getResources().getString(R.string.send_message);
-		action.ocl = new OnClickListener() {
+		action.ocl = new OnClickListener()
+		{
 
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v)
+			{
 				mam.cancel();
-				new TextareaPopup(HomeActivity.this, organization) {
+				new TextareaPopup(HomeActivity.this, organization)
+				{
 					@Override
-					public void cancel() {
+					public void cancel()
+					{
 						// TODO: send a message...
-						
+
 						super.cancel();
 					}
 				};
 			}
 		};
 		actions.add(action);
-		
+
 		action = new ContextMenuAction();
 		action.label = getResources().getString(R.string.resend_credentials);
-		action.ocl = new OnClickListener() {
-			
+		action.ocl = new OnClickListener()
+		{
+
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v)
+			{
 				mam.cancel();
 				informaCam.resendCredentials(organization);
-				Toast
-					.makeText(HomeActivity.this, getResources().getString(R.string.you_have_resent_your_credentials_to_x, organization.organizationName), Toast.LENGTH_LONG)
-					.show();
+				Toast.makeText(HomeActivity.this, getResources().getString(R.string.you_have_resent_your_credentials_to_x, organization.organizationName),
+						Toast.LENGTH_LONG).show();
 			}
 		};
 		actions.add(action);
@@ -342,62 +354,78 @@ public class HomeActivity extends SherlockFragmentActivity implements HomeActivi
 	}
 
 	@Override
-	public void getContextualMenuFor(final IMedia media) {
-		List<ContextMenuAction> actions = new Vector<ContextMenuAction>();
+	public void getContextualMenuFor(final IMedia media, View anchorView)
+	{
+		try
+		{
+			if (anchorView == null)
+				return; // Need an anchor view
+			
+			LayoutInflater inflater = LayoutInflater.from(this);
 
-		ContextMenuAction action = new ContextMenuAction();
-		action.label = getResources().getString(R.string.delete);
-		action.ocl = new OnClickListener() {
+			ViewGroup anchorRoot = null;
+			anchorRoot = (ViewGroup) anchorView.getRootView();
+			
+			View content = inflater.inflate(R.layout.popup_media_context_menu, anchorRoot, false);
+			content.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+			PopupWindow mMenuPopup = new PopupWindow(content, content.getMeasuredWidth(), content.getMeasuredHeight(), true);
 
-			@Override
-			public void onClick(View v) {
-				mam.cancel();
-				if((informaCam.mediaManifest.getById(media._id)).delete()) {
-					((GalleryFragment) galleryFragment).updateAdapter(0);
+			// Delete
+			//
+			View btnDelete = content.findViewById(R.id.btnDeleteMedia);
+			btnDelete.setOnClickListener(new PopupClickListener(mMenuPopup)
+			{
+				@Override
+				protected void onSelected()
+				{
+					if ((informaCam.mediaManifest.getById(media._id)).delete())
+					{
+						((GalleryFragment) galleryFragment).updateAdapter(0);
+					}
 				}
-			}
+			});
 
-		};
-		actions.add(action);
-
-		action = new ContextMenuAction();
-		action.label = getResources().getString(R.string.rename);
-		action.ocl = new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				mam.cancel();
-				new RenamePopup(HomeActivity.this, informaCam.mediaManifest.getById(media._id));
-			}
-
-		};
-		actions.add(action);
-
-		action = new ContextMenuAction();
-		action.label = getResources().getString(R.string.send);
-		action.ocl = new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				mam.cancel();
-				new SharePopup(HomeActivity.this, informaCam.mediaManifest.getById(media._id), true);
-			}
-
-		};
-		actions.add(action);
-
-		mam = new MediaActionMenu(this, actions);
-		mam.Show();
+			// Share
+			//
+			View btnShare = content.findViewById(R.id.btnShareMedia);
+			btnShare.setOnClickListener(new PopupClickListener(mMenuPopup)
+			{
+				@Override
+				protected void onSelected()
+				{
+					new SharePopup(HomeActivity.this, informaCam.mediaManifest.getById(media._id), true);
+				}
+			});	
+			
+			mMenuPopup.setOutsideTouchable(true);
+			mMenuPopup.setBackgroundDrawable(new BitmapDrawable());
+			mMenuPopup.showAsDropDown(anchorView, anchorView.getWidth(), -anchorView.getHeight());
+				
+			mMenuPopup.getContentView().setOnClickListener(new PopupClickListener(mMenuPopup));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	@Override
-	public void onBackPressed() {
-		setResult(Activity.RESULT_CANCELED);
-		finish();
+	public void onBackPressed()
+	{
+		if (viewPager.getCurrentItem() != INDEX_MAIN)
+		{
+			viewPager.setCurrentItem(INDEX_MAIN);
+		}
+		else
+		{
+			setResult(Activity.RESULT_CANCELED);
+			finish();
+		}
 	}
 
 	@Override
-	public void logoutUser() {
+	public void logoutUser()
+	{
 		getIntent().putExtra(Codes.Extras.LOGOUT_USER, true);
 		setResult(Activity.RESULT_CANCELED);
 		finish();
@@ -411,19 +439,22 @@ public class HomeActivity extends SherlockFragmentActivity implements HomeActivi
 		
 		if(responseCode == Activity.RESULT_OK) {
 			switch(requestCode) {
+
 			case Codes.Routes.CAMERA:
-				viewPager.setCurrentItem(1);
-				
+				viewPager.setCurrentItem(INDEX_GALLERY);
+
 				informaCam.mediaManifest.sortBy(Models.IMediaManifest.Sort.DATE_DESC);
 				/*
-				 *  XXX: Other developers, take note:
-				 *  
-				 *   the returned media can be JSONified.  
-				 *   It represents the media has been captured, but that may or may not have been processed.
-				 *   
-				 *   InformaCam will send a message whenever a new media item has been processed.
-				 *   The message contains the Codes.Extras.Messages.DCIM.ADD code, which is handled by "onUpdate()"
-				 *   
+				 * XXX: Other developers, take note:
+				 * 
+				 * the returned media can be JSONified. It represents the media
+				 * has been captured, but that may or may not have been
+				 * processed.
+				 * 
+				 * InformaCam will send a message whenever a new media item has
+				 * been processed. The message contains the
+				 * Codes.Extras.Messages.DCIM.ADD code, which is handled by
+				 * "onUpdate()"
 				 */
 				IDCIMSerializable returnedMedia = (IDCIMSerializable) data.getSerializableExtra(Codes.Extras.RETURNED_MEDIA);
 				Logger.d(LOG, "new dcim:\n" + returnedMedia.asJson().toString());
@@ -431,7 +462,7 @@ public class HomeActivity extends SherlockFragmentActivity implements HomeActivi
 				if(!returnedMedia.dcimList.isEmpty()) {
 					setPending(returnedMedia.dcimList.size(), 0);
 				}
-				
+
 				informaCam.stopInforma();
 				route = null;
 				break;
@@ -446,181 +477,210 @@ public class HomeActivity extends SherlockFragmentActivity implements HomeActivi
 				logoutUser();
 				break;
 			}
-		} else {
-			switch(requestCode) {
-			case Codes.Routes.CAMERA:
-				informaCam.stopInforma();
-				
-				viewPager.setCurrentItem(1);
-				break;
-			}
-			
-			
 		}
 	}
 
-	class TabPager extends FragmentStatePagerAdapter implements TabHost.OnTabChangeListener, OnPageChangeListener {
+	class TabPager extends FragmentStatePagerAdapter implements OnPageChangeListener
+	{
 
-		public TabPager(FragmentManager fm) {
+		public TabPager(FragmentManager fm)
+		{
 			super(fm);
 		}
 
 		@Override
-		public void onTabChanged(String tabId) {
-			int i=0;
-			for(Fragment f : fragments) {
-				if(f.getClass().getName().equals(tabId)) {
-					viewPager.setCurrentItem(i);
-					break;
-				}
-
-				i++;
-			}
+		public void onPageScrollStateChanged(int state)
+		{
 		}
 
 		@Override
-		public void onPageScrollStateChanged(int state) {}
+		public void onPageScrolled(int arg0, float arg1, int arg2)
+		{
+		}
 
 		@Override
-		public void onPageScrolled(int arg0, float arg1, int arg2) {}
-
-		@Override
-		public void onPageSelected(int page) {
-			tabHost.setCurrentTab(page);
-			if(page == 2) {
+		public void onPageSelected(int page)
+		{
+			// tabHost.setCurrentTab(page);
+			if (page == 3)
+			{
 				launchCamera();
-			} else if(page == 0) {
-				if(fragments.get(page) instanceof InformaCamEventListener) {
-					((InformaCamEventListener) fragments.get(page)).onUpdate(new Message());
-				}
+			} else {
+				//updateAdapter(0);
 			}
+			supportInvalidateOptionsMenu();
 		}
 
 		@Override
-		public Fragment getItem(int which) {
+		public Fragment getItem(int which)
+		{
 			return fragments.get(which);
 		}
 
-
 		@Override
-		public int getCount() {
+		public int getCount()
+		{
 			return fragments.size();
 		}
 
 	}
 
 	@Override
-	public void onInformaCamStart(Intent intent) {}
+	public void onInformaCamStart(Intent intent)
+	{
+	}
 
 	@Override
-	public void onInformaCamStop(Intent intent) {}
+	public void onInformaCamStop(Intent intent)
+	{
+	}
 
 	@Override
-	public void onInformaStop(Intent intent) {
+	public void onInformaStop(Intent intent)
+	{
 		route = null;
 	}
 
 	@Override
-	public void onInformaStart(Intent intent) {
-	//	waiter.cancel();
-		if(route != null) {
-			if(route.equals(toEditor)) {
+	public void onInformaStart(Intent intent)
+	{
+		// waiter.cancel();
+		doRouteUs();
+	}
+
+	private void routeUs()
+	{
+		if (informaCam.informaService != null)
+			doRouteUs();
+		else
+			informaCam.startInforma();
+	}
+	
+	private void doRouteUs()
+	{
+		if (route != null)
+		{
+			if (route.equals(toEditor))
+			{
 				startActivityForResult(toEditor, Routes.EDITOR);
-			} else if(route.equals(toCamera)) {
+			}
+			else if (route.equals(toCamera))
+			{
 				startActivityForResult(toCamera, Routes.CAMERA);
 			}
 		}
 	}
 
 	@Override
-	public void waiter(boolean show) {
+	public void waiter(boolean show)
+	{
 		/*
-		if(show) {
-			waiter = new WaitPopup(this);
-		} else {
-			if(waiter != null) {
-				waiter.cancel();
-			}
-		}*/
+		 * if(show) { waiter = new WaitPopup(this); } else { if(waiter != null)
+		 * { waiter.cancel(); } }
+		 */
 	}
 
 	@Override
-	public void updateData(INotification notification, Message message) {}
+	public void updateData(INotification notification, Message message)
+	{
+	}
 
 	@Override
-	public void updateData(IOrganization organization, Message message) {}
-	
+	public void updateData(IOrganization organization, Message message)
+	{
+	}
+
 	private final static String HOCKEY_APP_ID = "819d2172183272c9d84cd3a4dbd9296b";
-	
-	 private void checkForCrashes() {
-		 // XXX: Remove this for store builds!
-		 CrashManager.register(this, HOCKEY_APP_ID);
-	 }
 
-	 private void checkForUpdates() {
-	   // XXX: Remove this for store builds!
-	   UpdateManager.register(this, HOCKEY_APP_ID);
-	 }
-
-	@Override
-	public void updateAdapter(int which) {
-		Log.d(LOG, "update adapter invoked... (which = " + which + ")");
-		if(informaCam.getCredentialManagerStatus() == org.witness.informacam.utils.Constants.Codes.Status.UNLOCKED) {
-			
-			for(Fragment f : fragments) {
-
-				if (f instanceof ListAdapterListener) {
-					((ListAdapterListener)f).updateAdapter(which);
-				}
-			}
-		}
+	private void checkForCrashes()
+	{
+		CrashManager.register(this, HOCKEY_APP_ID);
 	}
-	
-	@Override
-	public void setPending(int numPending, int numCompleted) {
-		if(informaCam.getCredentialManagerStatus() == org.witness.informacam.utils.Constants.Codes.Status.UNLOCKED) {			
-			if (fragments.get(1) instanceof ListAdapterListener) {
-				((ListAdapterListener)fragments.get(1)).setPending(numPending, numCompleted);
-			}
-		}
-		
+
+	private void checkForUpdates()
+	{
+		// XXX: Remove this for store builds!
+		UpdateManager.register(this, HOCKEY_APP_ID);
 	}
 
 	@Override
-	public void setLocale(String newLocale) {
+	public void updateAdapter(int which)
+	{
+		if (informaCam.getCredentialManagerStatus() == org.witness.informacam.utils.Constants.Codes.Status.UNLOCKED)
+		{
+			Fragment f = fragments.get(viewPager.getCurrentItem());
+
+			if (f instanceof ListAdapterListener)
+			{
+				((ListAdapterListener) f).updateAdapter(which);
+			}
+		}
+	}
+
+	@Override
+	public void setPending(int numPending, int numCompleted)
+	{
+		if (informaCam.getCredentialManagerStatus() == org.witness.informacam.utils.Constants.Codes.Status.UNLOCKED)
+		{
+			Fragment f = fragments.get(viewPager.getCurrentItem());
+
+			if (f instanceof ListAdapterListener)
+			{
+				((ListAdapterListener) f).setPending(numPending, numCompleted);
+			}
+		}
+
+	}
+
+	@Override
+	public void setLocale(String newLocale)
+	{
 		lastLocale = newLocale;
 	}
 
 	@Override
-	public String getLocale() {
+	public String getLocale()
+	{
 		return lastLocale;
 	}
 
 	@Override
-	public void onUpdate(final Message message) {
+	public void onUpdate(final Message message)
+	{
 		int code = message.getData().getInt(Codes.Extras.MESSAGE_CODE);
-		
-		switch(code) {
+
+		switch (code)
+		{
 		case org.witness.informacam.utils.Constants.Codes.Messages.DCIM.ADD:
 			final Bundle data = message.getData();
+
 			
 			mHandlerUI.sendEmptyMessage(0);
-			mHandlerUI.post(new Runnable() {
+			mHandlerUI.post(new Runnable()
+			{
 				@Override
-				public void run() {
+				public void run()
+				{
 					setPending(data.getInt(Codes.Extras.NUM_PROCESSING), data.getInt(Codes.Extras.NUM_COMPLETED));
 				}
 			});
-			
+
 			break;
 		case org.witness.informacam.utils.Constants.Codes.Messages.Transport.GENERAL_FAILURE:
-			mHandlerUI.post(new Runnable() {
+			mHandlerUI.post(new Runnable()
+			{
 				@Override
-				public void run() {
+				public void run()
+				{
 					Toast.makeText(HomeActivity.this, message.getData().getString(Codes.Extras.GENERAL_FAILURE), Toast.LENGTH_LONG).show();
 				}
 			});
 			break;
+
+		case org.witness.informacam.utils.Constants.Codes.Messages.UI.REPLACE:
+			mainFragment.setIsGeneratingKey(false);
+			break;
+
 		case org.witness.informacam.utils.Constants.Codes.Messages.Transport.ORBOT_UNINSTALLED:
 			mHandlerUI.post(new Runnable() {
 				@Override
@@ -639,20 +699,65 @@ public class HomeActivity extends SherlockFragmentActivity implements HomeActivi
 				}
 			});
 			break;
-			
+
 		}
 	}
-	
-	private Handler mHandlerUI = new Handler ()
+
+	private final Handler mHandlerUI = new Handler()
 	{
 
 		@Override
-		public void handleMessage(Message msg) {
-			
+		public void handleMessage(Message msg)
+		{
+
 			super.handleMessage(msg);
-			
+
 			updateAdapter(msg.what);
 		}
-		
+
 	};
+
+	@Override
+	public void launchGallery()
+	{
+		informaCam.stopInforma();
+		viewPager.setCurrentItem(INDEX_GALLERY);
+	}
+
+	@Override
+	public void launchVideo()
+	{
+		resetActionBar();
+		toCamera.putExtra(
+				org.witness.informacam.utils.Constants.Codes.Extras.CAMERA_TYPE,
+				org.witness.informacam.utils.Constants.App.Camera.Type.CAMCORDER);
+		route = toCamera;
+		routeUs();
+	}
+
+	@Override
+	public void launchMain()
+	{
+		viewPager.setCurrentItem(INDEX_MAIN);
+		resetActionBar();
+		routeUs();
+	}
+
+	private void resetActionBar()
+	{
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayShowTitleEnabled(true);
+		actionBar.setTitle(R.string.app_name);
+		actionBar.setDisplayShowHomeEnabled(true);
+		actionBar.setDisplayHomeAsUpEnabled(false);
+		actionBar.setHomeButtonEnabled(true);
+		actionBar.setLogo(this.getResources().getDrawable(R.drawable.ic_action_up));
+		actionBar.setDisplayUseLogoEnabled(false);
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+	}
+
+	@Override
+	public void onMediaRecorderStop()
+	{
+	}
 }

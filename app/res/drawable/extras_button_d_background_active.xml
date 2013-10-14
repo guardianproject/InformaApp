@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <solid android:color="@drawable/white" />
-    <stroke android:color="@drawable/peuter" android:width="1dip"/>
+    <solid android:color="@color/blue_light_semi" />
+<!--     <stroke android:color="@drawable/peuter" android:width="1dip"/> -->
 </shape>

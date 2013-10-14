@@ -1,0 +1,3 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_done" android:title="@string/menu_done" android:orderInCategory="100" android:showAsAction="always" android:enabled="true"/>
+</menu>

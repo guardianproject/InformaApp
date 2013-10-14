@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources
+    xmlns:app="http://schemas.android.com/apk/res/org.witness.iwitness"
+    >
+<style name="WizardTheme" parent="Theme.Sherlock.Light.NoActionBar">
+	<item name="actionBarStyle">@style/EditorActionBar</item>
+	<item name="android:actionBarStyle">@style/EditorActionBar</item>
+	<item name="actionModeBackground">@drawable/actionbar_actionmode_background</item>
+	<item name="android:actionModeBackground">@drawable/actionbar_actionmode_background</item>
+</style>
+
+<style name="WizardEdittext">
+    <item name="android:background">@android:color/white</item>
+    <item name="android:textColor">#6D6E71</item>
+    <item name="android:padding">4dip</item>
+    <item name="android:layout_marginTop">5dip</item>
+    <item name="android:layout_marginBottom">5dip</item>
+    <item name="font">Roboto-Italic</item>
+    <item name="android:textSize">15sp</item>
+</style>
+
+<style name="WizardH1" parent="iwitness_h1">
+    <item name="font">Roboto-Bold</item>
+    <item name="android:textSize">20sp</item>
+</style>
+
+<style name="WizardH3" parent="iwitness_h3">
+    <item name="font">Roboto-Regular</item>
+    <item name="android:textSize">15sp</item>
+</style>
+
+</resources>

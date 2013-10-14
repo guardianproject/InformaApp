@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
+	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
+	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
+	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
+	<!ENTITY ns_vars "http://ns.adobe.com/Variables/1.0/">
+	<!ENTITY ns_imrep "http://ns.adobe.com/ImageReplacement/1.0/">
+	<!ENTITY ns_sfw "http://ns.adobe.com/SaveForWeb/1.0/">
+	<!ENTITY ns_custom "http://ns.adobe.com/GenericCustomNamespace/1.0/">
+	<!ENTITY ns_adobe_xpath "http://ns.adobe.com/XPath/1.0/">
+]>
+<svg version="1.1" id="Layer_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="48px" height="48px"
+	 viewBox="0 0 48 48" enable-background="new 0 0 48 48" xml:space="preserve">
+<metadata>
+	<sfw  xmlns="&ns_sfw;">
+		<slices></slices>
+		<sliceSourceBounds  height="42.9" width="16383" y="285.05" x="-7796" bottomLeftOrigin="true"></sliceSourceBounds>
+		<optimizationSettings>
+			<targetSettings  targetSettingsID="0" fileFormat="GIFFormat">
+				
+					<GIFFormat  transparency="true" numColors="256" rolloverMasterPalette="false" reductionAlgorithm="selective" noMatteColor="false" matteColor="#FFFFFF" autoReduce="false" lossy="0" interlaced="false" ditherPercent="100" includeCaption="false" webShiftPercent="0" ditherAlgorithm="diffusion">
+					<colorTable  isExact="false"></colorTable>
+					<lockedColors></lockedColors>
+					<colorShiftEntries></colorShiftEntries>
+				</GIFFormat>
+			</targetSettings>
+		</optimizationSettings>
+	</sfw>
+</metadata>
+<path fill="#00AEEF" d="M24,44.109C12.913,44.109,3.891,35.087,3.891,24C3.891,12.914,12.913,3.892,24,3.892
+	c11.088,0,20.109,9.021,20.109,20.108S35.088,44.109,24,44.109z"/>
+<path fill="#FFFFFF" d="M24,5.231c10.349,0,18.769,8.42,18.769,18.769c0,10.348-8.42,18.769-18.769,18.769S5.231,34.348,5.231,24
+	C5.231,13.651,13.651,5.231,24,5.231 M24,2.55C12.152,2.55,2.55,12.154,2.55,24c0,11.847,9.603,21.45,21.45,21.45
+	S45.45,35.847,45.45,24C45.45,12.154,35.848,2.55,24,2.55L24,2.55z"/>
+<polygon id="check-mark-icon_1_" fill="#FFFFFF" points="33.423,13.197 20.271,26.353 14.574,20.652 10.351,24.879 20.271,34.804 
+	37.652,17.42 "/>
+</svg>

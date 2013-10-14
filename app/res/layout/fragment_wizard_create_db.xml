@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blue_dark"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView2"
+        style="@style/WizardH3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="@string/wizard_step_1_of_2"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/textView1"
+        style="@style/WizardH1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="30dp"
+        android:text="@string/wizard_create_db"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/white" />
+
+    <ScrollView
+        android:id="@+id/svInputControls"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:id="@+id/llInputControls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/llInputFields"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/wizard_rounded_background"
+                android:orientation="vertical"
+                android:padding="10dp" >
+
+                <org.witness.iwitness.app.views.CustomFontEditText
+                    android:id="@+id/user_name"
+                    style="@style/WizardEdittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/name"
+                    android:inputType="text"
+                    android:maxLength="50"
+                    android:maxLines="1" />
+
+                <org.witness.iwitness.app.views.CustomFontEditText
+                    android:id="@+id/user_email"
+                    style="@style/WizardEdittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/wizard_email_optional"
+                    android:inputType="textEmailAddress"
+                    android:maxLength="200"
+                    android:maxLines="1" />
+
+                <org.witness.iwitness.app.views.CustomFontEditText
+                    android:id="@+id/user_password"
+                    style="@style/WizardEdittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/password"
+                    android:inputType="textPassword"
+                    android:maxLength="50" />
+
+                <org.witness.iwitness.app.views.CustomFontEditText
+                    android:id="@+id/user_password_again"
+                    style="@style/WizardEdittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/password_again"
+                    android:inputType="textPassword"
+                    android:maxLength="50" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/wizard_commit"
+                style="@style/BlueRoundedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="30dp"
+                android:text="@string/wizard_ok_next" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

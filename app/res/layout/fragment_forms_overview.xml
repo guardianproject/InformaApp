@@ -2,7 +2,76 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_marginLeft="6dip"
-    android:layout_marginRight="6dip"
-    android:id="@+id/overview_form_root" />
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1" >
+
+        <TextView
+            android:id="@+id/media_time_captured"
+            style="@style/EditorMediaTimeStyle"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_weight="0.5"
+            android:gravity="left|center_vertical"
+            android:text="13 Feb 2013 10:27 PM" />
+
+        <TextView
+            android:id="@+id/media_details_location"
+            style="@style/EditorMediaInfoStyle"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="right|center_vertical"
+            android:text="Shared 3 days ago with IBA" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlAudio"
+        android:layout_width="match_parent"
+        android:layout_height="94dp" >
+
+        <LinearLayout
+            android:id="@+id/llAudioFiles"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@drawable/audio_note_list_background"
+            android:orientation="horizontal"
+            android:scrollbars="horizontal" >
+        </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/sbAudio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/media_notes"
+        style="@style/EditorTopLevelNote"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="top|left"
+        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/media_notes_edit"
+        style="@style/EditorTopLevelNote"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="top|left"
+        android:layout_weight="1"
+        android:background="@null"
+        android:gravity="top|left"
+        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+</LinearLayout>

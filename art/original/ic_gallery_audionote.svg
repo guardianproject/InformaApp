@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.0.0, SVG Export Plug-In  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
+	<!ENTITY ns_flows "http://ns.adobe.com/Flows/1.0/">
+]>
+<svg version="1.1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="48px" height="48px" viewBox="-10.913 -4.222 48 48"
+	 overflow="visible" enable-background="new -10.913 -4.222 48 48" xml:space="preserve">
+<defs>
+</defs>
+<path id="microphone-3-icon_3_" fill="#231F20" d="M6.639,18.016V6.449C6.639,2.889,9.525,0,13.087,0
+	c3.561,0,6.447,2.889,6.447,6.449v11.567c0,3.563-2.887,6.448-6.447,6.449C9.525,24.465,6.639,21.579,6.639,18.016z M22.382,14.698
+	v3.318c0,5.125-4.17,9.293-9.295,9.294c-5.125,0-9.294-4.169-9.294-9.294v-3.318H0v3.318c0,6.493,4.748,11.893,10.952,12.913v4.33
+	H5.5v3.796h15.174v-3.796h-5.453v-4.33c6.204-1.021,10.954-6.421,10.954-12.914v-3.318L22.382,14.698L22.382,14.698z"/>
+</svg>

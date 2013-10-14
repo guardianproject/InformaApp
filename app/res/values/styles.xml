@@ -4,7 +4,7 @@
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
-    <style name="AppBaseTheme" parent="android:Theme">
+    <style name="AppBaseTheme" parent="Theme.Sherlock.Light.DarkActionBar">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
@@ -36,7 +36,7 @@
     
     <style name="iwitness_h1">
         <item name="android:textColor">@drawable/white</item>
-        <item name="android:textSize">28sp</item>
+        <item name="android:textSize">24sp</item>
     </style>
     
     <style name="iwitness_h2">
@@ -46,7 +46,7 @@
     
     <style name="iwitness_h3">
         <item name="android:textColor">@drawable/black</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">16sp</item>
     </style>
     
     <style name="iwitness_p">
@@ -65,7 +65,7 @@
     </style>
     
     <style name="iwitness_edittext">
-        <item name="android:background">@drawable/extras_button_d_background_inactive</item>
+        <item name="android:background">@drawable/edit_text_background_selector</item>
         <item name="android:padding">8dip</item>
         <item name="android:textStyle">italic</item>
     </style>
@@ -82,12 +82,14 @@
     
     <style name="button_c">
         <item name="android:background">@drawable/extras_button_c_selector</item>
-        <item name="android:textColor">@drawable/trans_grey_1</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">15sp</item>
     </style>
     
     <style name="button_d">
         <item name="android:background">@drawable/extras_button_d_selector</item>
-        <item name="android:textColor">@drawable/black</item>
+        <item name="android:textColor">@android:color/white</item>
+	    <item name="android:textSize">15sp</item>
     </style>
     
     <style name="button_e">
@@ -102,4 +104,62 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="context_menu_button">
+        <item name="android:background">@drawable/context_menu_button_selector</item>
+        <item name="android:textColor">@drawable/white</item>
+    </style>
+    
+    <style name="EditorTheme" parent="Theme.Sherlock.Light.DarkActionBar">
+		<item name="actionBarStyle">@style/EditorActionBar</item>
+        <item name="android:actionBarStyle">@style/EditorActionBar</item>
+    	<item name="actionModeBackground">@drawable/actionbar_actionmode_background</item>
+    	<item name="android:actionModeBackground">@drawable/actionbar_actionmode_background</item>
+        </style>
+    
+    <style name="EditorActionBar" parent="@style/Widget.Sherlock.Light.ActionBar">
+    	<item name="background">@drawable/actionbar_background</item>
+    	<item name="android:background">@drawable/actionbar_background</item>
+    	<item name="titleTextStyle">@style/EditorActionBarTitle</item>
+    	<item name="android:titleTextStyle">@style/EditorActionBarTitle</item>
+    </style>
+
+	<style name="EditorActionBarTitle" parent="@style/TextAppearance.Sherlock.Widget.ActionBar.Title">
+    	<item name="android:textColor">@android:color/white</item>
+	</style>
+
+	<style name="HomeTheme" parent="Theme.Sherlock.Light.DarkActionBar">
+		<item name="actionBarStyle">@style/EditorActionBar</item>
+        <item name="android:actionBarStyle">@style/EditorActionBar</item>
+    	<item name="actionModeBackground">@drawable/actionbar_actionmode_background</item>
+    	<item name="android:actionModeBackground">@drawable/actionbar_actionmode_background</item>
+    	<item name="actionModeCloseDrawable">@drawable/ic_action_select</item>
+    	<item name="android:actionModeCloseDrawable">@drawable/ic_action_select</item>
+		<item name="actionModeStyle">@style/HomeActionMode</item>
+        <item name="android:actionModeStyle">@style/HomeActionMode</item>
+    </style>
+       
+    <style name="HomeActionMode" parent="@style/Widget.Sherlock.ActionMode">
+    	<item name="titleTextStyle">@style/HomeActionModeTitle</item>
+    	<item name="android:titleTextStyle">@style/HomeActionModeTitle</item>
+    </style>
+    
+	<style name="HomeActionModeTitle" parent="@style/TextAppearance.Sherlock.Widget.ActionMode.Title">
+    	<item name="android:textColor">@android:color/black</item>
+	</style>
+	
+	<style name="PopupInfoStyle">
+	    <item name="android:background">@drawable/popup_info_background</item>
+	    <item name="android:textColor">@android:color/white</item> 
+	</style>
+	
+	<style name="RecordButtonStyle">
+	    <item name="android:background">@drawable/record_button_background</item>
+	    <item name="android:textColor">@android:color/white</item> 
+	</style>
+	
+	<style name="BlueRoundedButton">
+        <item name="android:background">@drawable/blue_rounded_button_selector</item>
+        <item name="android:textColor">@android:color/white</item>
+	    <item name="android:textSize">15sp</item>
+    </style>
 </resources>

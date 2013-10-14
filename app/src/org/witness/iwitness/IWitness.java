@@ -1,12 +1,26 @@
 package org.witness.iwitness;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.witness.informacam.InformaCam;
+import org.witness.informacam.crypto.KeyUtility;
+import org.witness.informacam.models.notifications.INotification;
+import org.witness.informacam.models.organizations.IOrganization;
+import org.witness.informacam.models.transport.ITransportStub;
 import org.witness.informacam.models.utils.ILanguageMap;
+import org.witness.informacam.storage.FormUtility;
+import org.witness.informacam.transport.TransportUtility;
 import org.witness.informacam.ui.CameraActivity;
-import org.witness.informacam.ui.WizardActivity;
+import org.witness.informacam.utils.Constants.App.Storage.Type;
 import org.witness.informacam.utils.Constants.Logger;
+import org.witness.informacam.utils.Constants.Models;
+import org.witness.informacam.utils.Constants.Models.IMedia.MimeType;
+import org.witness.informacam.utils.Constants.Models.IUser;
 import org.witness.informacam.utils.InformaCamBroadcaster.InformaCamStatusListener;
 import org.witness.iwitness.app.EditorActivity;
 import org.witness.iwitness.app.HomeActivity;
@@ -14,44 +28,51 @@ import org.witness.iwitness.app.LoginActivity;
 import org.witness.iwitness.app.screens.wizard.OriginalImagePreference;
 import org.witness.iwitness.utils.Constants;
 import org.witness.iwitness.utils.Constants.App;
-import org.witness.iwitness.utils.Constants.Preferences;
 import org.witness.iwitness.utils.Constants.App.Camera;
 import org.witness.iwitness.utils.Constants.App.Editor;
 import org.witness.iwitness.utils.Constants.App.Home;
 import org.witness.iwitness.utils.Constants.App.Login;
 import org.witness.iwitness.utils.Constants.App.Wizard;
 import org.witness.iwitness.utils.Constants.Codes;
+import org.witness.iwitness.utils.Constants.Preferences;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
-public class IWitness extends Activity implements InformaCamStatusListener {
+public class IWitness extends Activity implements InformaCamStatusListener
+{
 	Intent init = null;
 	Intent route = null;
 	int routeCode;
-	
+
 	private final static String LOG = Constants.App.Router.LOG;
-		
+
 	InformaCam informaCam;
+	private Handler mHandler;
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
-				
+		
 		init = getIntent();
-		
+
 		setContentView(R.layout.activity_main);
-		
+
 		informaCam = (InformaCam)getApplication();
 		
+		mHandler = new Handler();
 		
 		if(getIntent().hasExtra(Codes.Extras.CHANGE_LOCALE) && getIntent().getBooleanExtra(Codes.Extras.CHANGE_LOCALE, false)) {
 			onInformaCamStart(getIntent());
 		}
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -64,7 +85,9 @@ public class IWitness extends Activity implements InformaCamStatusListener {
 		try {
 			if(route != null) {
 				routeByIntent();
-			} else {
+			}
+			else
+			{
 				Log.d(LOG, "route is null now, please wait");
 				Log.d(LOG, "hasCredentialManager? " + String.valueOf(informaCam.hasCredentialManager()));
 				
@@ -81,40 +104,46 @@ public class IWitness extends Activity implements InformaCamStatusListener {
 						routeCode = Login.ROUTE_CODE;
 						break;
 					}
-					
+
 					routeByIntent();
-				} else {
+				}
+				else
+				{
 					Log.d(LOG, "no, not logged in");
 				}
 			}
-			
+	
 		} catch(NullPointerException e) {
 			Logger.e(LOG, e);
 		}
 	}
-	
+
 	@Override
-	public void onPause() {
+	public void onPause()
+	{
 		super.onPause();
 	}
-	
+
 	@Override
-	public void onStop() {
+	public void onStop()
+	{
 		super.onStop();
 	}
-	
+
 	@Override
-	public void onDestroy() {
+	public void onDestroy()
+	{
 		super.onDestroy();
-		
+
 	}
-	
+
 	@Override
-	public void onSaveInstanceState(Bundle outState) {
+	public void onSaveInstanceState(Bundle outState)
+	{
 		outState.putBoolean(App.TAG, true);
 		super.onSaveInstanceState(outState);
 	}
-	
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		informaCam.setStatusListener(this);
@@ -153,33 +182,44 @@ public class IWitness extends Activity implements InformaCamStatusListener {
 			
 			route = new Intent(this, HomeActivity.class);
 			routeCode = Home.ROUTE_CODE;
-			
-			switch(requestCode) {
+
+			switch (requestCode)
+			{
 			case Codes.Routes.CAMERA:
 				route = new Intent(this, EditorActivity.class);
 				routeCode = Editor.ROUTE_CODE;
-				
+
 				break;
 			case Codes.Routes.EDITOR:
-				
+
 				break;
 			case Codes.Routes.LOGIN:
-				
+
 				break;
 			case Codes.Routes.HOME:
-				if(data != null && data.hasExtra(Codes.Extras.CHANGE_LOCALE)) {
+				if (data != null && data.hasExtra(Codes.Extras.CHANGE_LOCALE))
+				{
 					route.putExtra(Codes.Extras.CHANGE_LOCALE, true);
 				}
-				
+
+				break;
+			case Codes.Routes.WIZARD:
+				route = new Intent(this, HomeActivity.class);
+				routeCode = Home.ROUTE_CODE;
+				route.putExtra(Codes.Extras.GENERATING_KEY, true);
+				generateKey();
 				break;
 			}
-			
+				
 			routeByIntent();
-		} else if(resultCode == Activity.RESULT_FIRST_USER) {
-			if(data.hasExtra(Codes.Extras.CHANGE_LOCALE) && data.getBooleanExtra(Codes.Extras.CHANGE_LOCALE, false)) {
+		}
+		else if (resultCode == Activity.RESULT_FIRST_USER)
+		{
+			if (data.hasExtra(Codes.Extras.CHANGE_LOCALE) && data.getBooleanExtra(Codes.Extras.CHANGE_LOCALE, false))
+			{
 				route.putExtra(Codes.Extras.CHANGE_LOCALE, true);
 			}
-			
+
 		}
 	}
 	
@@ -190,41 +230,50 @@ public class IWitness extends Activity implements InformaCamStatusListener {
 		
 		Log.d(LOG, "intent is: " + init.getAction());
 
-		if(Intent.ACTION_MAIN.equals(init.getAction())) {
-			
-		} else if("android.media.action.IMAGE_CAPTURE".equals(init.getAction())) {
+		if (Intent.ACTION_MAIN.equals(init.getAction()))
+		{
+
+		}
+		else if ("android.media.action.IMAGE_CAPTURE".equals(init.getAction()))
+		{
 			route = new Intent(this, CameraActivity.class);
 			routeCode = Camera.ROUTE_CODE;
-		} else if(Intent.ACTION_VIEW.equals(init.getAction())) {
+		}
+		else if (Intent.ACTION_VIEW.equals(init.getAction()))
+		{
 			route.setData(init.getData());
 		} else if("info.guardianproject.action.VERIFIED_MOBILE_MEDIA".equals(init.getAction())) {
 			route = new Intent(this, CameraActivity.class);
 			routeCode = Camera.ROUTE_CODE;
 		}
-		
+
 		route.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivityForResult(route, routeCode);
 	}
 
 	@Override
-	public void onInformaCamStart(Intent intent) {
-		int code = intent.getBundleExtra(org.witness.informacam.utils.Constants.Codes.Keys.SERVICE).getInt(org.witness.informacam.utils.Constants.Codes.Extras.MESSAGE_CODE);
+	public void onInformaCamStart(Intent intent)
+	{
+		int code = intent.getBundleExtra(org.witness.informacam.utils.Constants.Codes.Keys.SERVICE).getInt(
+				org.witness.informacam.utils.Constants.Codes.Extras.MESSAGE_CODE);
 		Log.d(LOG, "STARTING INFORMACAM ON IWITNESS (routeCode = " + code + ")");
-		
-		switch(code) {
+
+		switch (code)
+		{
 		case org.witness.informacam.utils.Constants.Codes.Messages.Wizard.INIT:
 			ArrayList<String> wizardFragments = new ArrayList<String>();
 			wizardFragments.add(OriginalImagePreference.class.getName());
-						
-			route = new Intent(this, WizardActivity.class);
-			
+
+			route = new Intent(this, org.witness.iwitness.app.WizardActivity.class);
+
 			route.putStringArrayListExtra(Codes.Extras.WIZARD_SUPPLEMENT, wizardFragments);
 			ILanguageMap languageMap = new ILanguageMap();
-			
-			for(int l=0; l<getResources().getStringArray(R.array.languages_).length; l++) {
+
+			for (int l = 0; l < getResources().getStringArray(R.array.languages_).length; l++)
+			{
 				languageMap.add(getResources().getStringArray(R.array.locales)[l], getResources().getStringArray(R.array.languages_)[l]);
 			}
-			
+
 			route.putExtra(Codes.Extras.SET_LOCALES, languageMap);
 			route.putExtra(Codes.Extras.LOCALE_PREF_KEY, Preferences.Keys.LANGUAGE);
 			routeCode = Wizard.ROUTE_CODE;
@@ -238,16 +287,101 @@ public class IWitness extends Activity implements InformaCamStatusListener {
 			routeCode = Home.ROUTE_CODE;
 			break;
 		}
-		
+
 		routeByIntent();
 	}
 
 	@Override
-	public void onInformaCamStop(Intent intent) {}
+	public void onInformaCamStop(Intent intent)
+	{
+	}
 
 	@Override
-	public void onInformaStop(Intent intent) {}
+	public void onInformaStop(Intent intent)
+	{
+	}
 
 	@Override
-	public void onInformaStart(Intent intent) {}
+	public void onInformaStart(Intent intent)
+	{
+	}
+	
+	private void generateKey()
+	{
+		Toast.makeText(this, getString(R.string.wizard_key_is_being_made), Toast.LENGTH_LONG).show();
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				if(KeyUtility.initDevice()) {
+					
+					mHandler.post(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							// save everything
+							InformaCam informaCam = (InformaCam)getApplication();
+							
+							informaCam.user.hasCompletedWizard = true;
+							informaCam.user.lastLogIn = System.currentTimeMillis();
+							informaCam.user.isLoggedIn = true;
+							
+							informaCam.saveState(informaCam.user);
+							informaCam.saveState(informaCam.languageMap);
+							informaCam.initData();
+							
+							try {
+								for(String s : informaCam.getAssets().list("includedOrganizations")) {
+									
+									InputStream ictdIS = informaCam.ioService.getStream("includedOrganizations/" + s, Type.APPLICATION_ASSET);
+									
+									byte[] ictdBytes = new byte[ictdIS.available()];
+									ictdIS.read(ictdBytes);
+									
+									IOrganization organization = informaCam.installICTD((JSONObject) new JSONTokener(new String(ictdBytes)).nextValue(), null, IWitness.this);
+									if(organization != null && !informaCam.user.isInOfflineMode) {
+										INotification notification = new INotification(getResources().getString(R.string.key_sent), getResources().getString(R.string.you_have_sent_your_credentials_to_x, organization.organizationName), Models.INotification.Type.NEW_KEY);
+										notification.taskComplete = false;
+										informaCam.addNotification(notification, null);
+										
+										ITransportStub transportStub = new ITransportStub(organization, notification);
+										transportStub.setAsset(IUser.PUBLIC_CREDENTIALS, IUser.PUBLIC_CREDENTIALS, MimeType.ZIP);
+										TransportUtility.initTransport(transportStub);
+									}
+								}
+							} catch(IOException e) {
+								Log.e(LOG, e.toString());
+								e.printStackTrace();
+							} catch (JSONException e) {
+								Log.e(LOG, e.toString());
+								e.printStackTrace();
+							}
+							
+							try {
+								for(String s : informaCam.getAssets().list("includedForms")) {
+									InputStream formXML = informaCam.ioService.getStream("includedForms/" + s, Type.APPLICATION_ASSET);
+									FormUtility.importAndParse(formXML);
+								}
+							} catch(IOException e) {
+								Log.e(LOG, e.toString());
+								e.printStackTrace();
+							}
+							
+							// Tell others we are done!
+							Bundle data = new Bundle();
+							data.putInt(Codes.Extras.MESSAGE_CODE, org.witness.informacam.utils.Constants.Codes.Messages.UI.REPLACE);
+							
+							Message message = new Message();
+							message.setData(data);
+							
+							informaCam.update(data);
+
+							Toast.makeText(IWitness.this, getString(R.string.wizard_key_made), Toast.LENGTH_LONG).show();
+						}
+					});
+				}
+			}
+		}).start();
+	}
+	
 }

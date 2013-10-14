@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:layout_margin="0dip"
+    android:background="@drawable/toolbar_grey_background"
+    android:orientation="horizontal"
+    android:weightSum="1" >
+
+    <LinearLayout
+        android:id="@+id/btnPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="0.33"
+        android:background="@drawable/toolbar_button_grey_selector"
+        android:gravity="center"
+        android:padding="5dp" >
+
+        <ImageView
+            android:id="@+id/ivPhoto"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_home_photo" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="match_parent"
+        android:background="@color/grey_medium" />
+    
+    <LinearLayout
+        android:id="@+id/btnVideo"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="0.33"
+        android:background="@drawable/toolbar_button_grey_selector"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="5dp" >
+
+        <ImageView
+            android:id="@+id/ivVideo"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_home_video" />
+
+    </LinearLayout>
+
+        <View
+        android:layout_width="1px"
+        android:layout_height="match_parent"
+        android:background="@color/grey_medium" />
+    
+    <LinearLayout
+        android:id="@+id/btnGallery"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="0.33"
+        android:background="@drawable/toolbar_button_grey_selector"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="5dp" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_home_gallery" />
+
+    </LinearLayout>
+    
+</LinearLayout>

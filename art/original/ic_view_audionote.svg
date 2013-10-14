@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
+	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
+	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
+	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
+	<!ENTITY ns_vars "http://ns.adobe.com/Variables/1.0/">
+	<!ENTITY ns_imrep "http://ns.adobe.com/ImageReplacement/1.0/">
+	<!ENTITY ns_sfw "http://ns.adobe.com/SaveForWeb/1.0/">
+	<!ENTITY ns_custom "http://ns.adobe.com/GenericCustomNamespace/1.0/">
+	<!ENTITY ns_adobe_xpath "http://ns.adobe.com/XPath/1.0/">
+]>
+<svg version="1.1" id="Layer_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="48px" height="48px"
+	 viewBox="0 0 48 48" enable-background="new 0 0 48 48" xml:space="preserve">
+<metadata>
+	<sfw  xmlns="&ns_sfw;">
+		<slices></slices>
+		<sliceSourceBounds  height="48.063" width="39.293" y="282.621" x="375.854" bottomLeftOrigin="true"></sliceSourceBounds>
+		<optimizationSettings>
+			<targetSettings  targetSettingsID="0" fileFormat="GIFFormat">
+				
+					<GIFFormat  transparency="true" numColors="256" rolloverMasterPalette="false" reductionAlgorithm="selective" noMatteColor="false" matteColor="#FFFFFF" autoReduce="false" lossy="0" interlaced="false" ditherPercent="100" includeCaption="false" webShiftPercent="0" ditherAlgorithm="diffusion">
+					<colorTable  isExact="false"></colorTable>
+					<lockedColors></lockedColors>
+					<colorShiftEntries></colorShiftEntries>
+				</GIFFormat>
+			</targetSettings>
+		</optimizationSettings>
+	</sfw>
+</metadata>
+<polygon fill="#231F20" points="41.416,11.805 41.416,45.648 6.584,45.648 6.584,2.048 31.838,2.048 31.838,11.805 43.646,11.805 
+	31.847,-0.169 31.847,-0.184 4.354,-0.184 4.354,47.879 43.646,47.879 43.646,11.805 "/>
+<path id="microphone-3-icon_1_" fill="#231F20" d="M20.037,25.088v-7.112c0-2.188,1.772-3.963,3.963-3.963
+	c2.191,0,3.965,1.773,3.965,3.963v7.112c0,2.186-1.772,3.963-3.965,3.963C21.812,29.049,20.037,27.273,20.037,25.088z
+	 M29.712,23.046v2.038c0,3.148-2.563,5.711-5.712,5.711c-3.147,0-5.71-2.562-5.71-5.711v-2.038h-2.332v2.038
+	c0,3.99,2.917,7.311,6.731,7.938v2.662h-3.352v2.33h9.325v-2.33h-3.352v-2.662c3.816-0.627,6.731-3.947,6.731-7.938v-2.038H29.712z"
+	/>
+</svg>

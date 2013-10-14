@@ -1,10 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
+
+        <org.witness.iwitness.app.views.TwoViewSlideLayout
+            android:id="@+id/root_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <FrameLayout
+                android:id="@+id/media_holder"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="0dip" />
+
+            <RelativeLayout
+                android:id="@+id/rlBottomPart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                                <include
+            android:id="@+id/toolbar_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            layout="@layout/fragment_editor_toolbar_bottom" />
+                                
+                <ScrollView
+                    android:id="@+id/svDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_above="@id/toolbar_bottom"
+                     >
+
+                    <FrameLayout
+                        android:id="@+id/details_form_holder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" >
+                    </FrameLayout>
+                </ScrollView>
+                
+
+                        
+            </RelativeLayout>
+        </org.witness.iwitness.app.views.TwoViewSlideLayout>
+
+
     <FrameLayout
-        android:id="@+id/main_fragment_root"
+        android:id="@+id/root_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_margin="0dip"
+        android:padding="0dip" />
+
+</FrameLayout>

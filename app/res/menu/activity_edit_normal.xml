@@ -1,0 +1,4 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_share" android:title="@string/menu_share" android:orderInCategory="100" android:icon="@drawable/ic_action_share" android:showAsAction="always" android:enabled="true"/>
+    <item android:id="@+id/menu_edit" android:title="@string/menu_edit" android:orderInCategory="101" android:showAsAction="always" android:enabled="true"/>
+</menu>

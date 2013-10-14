@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <PreferenceCategory android:title="@string/preferences" >
+         <ListPreference
+            android:title="@string/prefs_lock_screen"
+            android:defaultValue="1"
+            android:key="lockScreenMode"
+            android:entries="@array/lockScreenOptions_"
+            android:entryValues="@array/lockScreenOptions" />
+    
         <ListPreference
             android:defaultValue="0"
             android:entries="@array/languages_"
@@ -14,6 +20,12 @@
             android:key="originalImageHandling"
             android:entries="@array/originalImageOptions_"
             android:entryValues="@array/originalImageOptions" />
-    </PreferenceCategory>
 
+        <ListPreference
+            android:title="@string/prefs_panic"
+            android:defaultValue="0"
+            android:key="panicAction"
+            android:entries="@array/panicActionOptions_"
+            android:entryValues="@array/panicActionOptions" />
+        
 </PreferenceScreen>

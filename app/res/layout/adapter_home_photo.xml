@@ -1,0 +1,20 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/flPhotoRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <org.witness.iwitness.app.views.RoundedImageView
+        android:id="@+id/ivPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp" />
+
+    <ImageView
+        android:id="@+id/ivVideoSymbol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="30dp"
+        android:src="@drawable/ic_home_video" />
+
+</FrameLayout>

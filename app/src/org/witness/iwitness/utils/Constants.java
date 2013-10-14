@@ -1,13 +1,22 @@
 package org.witness.iwitness.utils;
 
+import org.witness.informacam.models.media.IMedia;
 import org.witness.informacam.models.notifications.INotification;
 import org.witness.informacam.models.organizations.IOrganization;
-import org.witness.informacam.models.media.IMedia;
 
 import android.net.Uri;
 import android.os.Message;
+import android.view.View;
 
 public class Constants {	
+	
+	public interface WizardActivityListener {
+		public void onLanguageSelected(String language);
+		public void onLanguageConfirmed();
+		public void onUsernameCreated(String username, String email, String password);
+		public void onTakePhotoClicked();
+	}
+	
 	public interface EditorActivityListener {
 		public IMedia media();
 		public void onMediaScanned(Uri uri);
@@ -19,13 +28,17 @@ public class Constants {
 		public void launchEditor(IMedia media);
 		public void logoutUser();
 		public void getContextualMenuFor(IOrganization organization);
-		public void getContextualMenuFor(IMedia media);
+		public void getContextualMenuFor(IMedia media, View anchorView);
 		public void getContextualMenuFor(INotification notification);
 		public void waiter(boolean show);
 		public void updateData(INotification notification, Message message);
 		public void updateData(IOrganization organization, Message message);
 		public void setLocale(String newLocale);
 		public String getLocale();
+		public void launchMain();
+		public void launchGallery();
+		public void launchCamera();
+		public void launchVideo();
 	}
 
 	public class Codes {
@@ -71,6 +84,7 @@ public class Constants {
 			public static final String GENERAL_FAILURE = org.witness.informacam.utils.Constants.Codes.Extras.GENERAL_FAILURE;
 			public static final String NUM_PROCESSING = org.witness.informacam.utils.Constants.Codes.Extras.NUM_PROCESSING;
 			public static final String NUM_COMPLETED = org.witness.informacam.utils.Constants.Codes.Extras.NUM_COMPLETED;
+			public static final String GENERATING_KEY = "generating_key";
 		}
 	}
 
@@ -80,8 +94,13 @@ public class Constants {
 
 	public class Preferences {
 		public class Keys {
+			public final static String LOCK_SCREEN_MODE = "lockScreenMode";
 			public final static String ORIGINAL_IMAGE_HANDLING = "originalImageHandling";
 			public static final String LANGUAGE = "iw_language";
+			public final static String PANIC_ACTION = "panicAction";
+			public final static String HINT_SWIPE_SHOWN = "hintSwipeShown";
+			public final static String HINT_AUDIO_NOTE_SAVED_SHOWN = "hintAudioNoteSavedShown";
+			public final static String HINT_PROCESSING_IMAGES_SHOWN = "hintProcessingImagesShown";
 		}
 
 		public class OriginalImageHandling {

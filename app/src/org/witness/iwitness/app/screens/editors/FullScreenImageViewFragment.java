@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.RectF;
 import android.media.ExifInterface;
 import android.util.Log;
 import android.widget.ImageView;
@@ -161,8 +162,8 @@ public class FullScreenImageViewFragment extends FullScreenViewFragment {
 		// This doesn't completely center the image but it get's closer
 		//int fudge = 42;
 		matrixTranslate = new float[] {
-				(float)((float) dims[0] -(float) bitmap.getWidth() * (float) matrixScale)/2f,
-				(float)((float) dims[1] - (float) bitmap.getHeight() * matrixScale)/2f
+				(dims[0] -bitmap.getWidth() * matrixScale)/2f,
+				(dims[1] - bitmap.getHeight() * matrixScale)/2f
 		};
 		matrix.postTranslate(matrixTranslate[0], matrixTranslate[1]);
 		Log.d(LOG, String.format("MATRIX TRANSLATE FOR IMAGE: %f , %f", matrixTranslate[0], matrixTranslate[1]));
@@ -198,5 +199,20 @@ public class FullScreenImageViewFragment extends FullScreenViewFragment {
 		specs.add(media_.height);
 		
 		return ArrayUtils.toPrimitive(specs.toArray(new Integer[specs.size()]));
+	}
+	
+	@Override
+	public RectF getImageBounds()
+	{
+		RectF rectImage = null;
+		if (bitmap != null)
+			rectImage = new RectF(0,0,bitmap.getWidth(),bitmap.getHeight());
+		if (rectImage != null)
+		{
+			Matrix inverse = new Matrix();
+			if (this.mediaHolder_.getImageMatrix().invert(inverse))
+				mediaHolder_.getImageMatrix().mapRect(rectImage);
+		}
+		return rectImage;
 	}
 }

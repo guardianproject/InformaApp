@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="#a0444444"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/btnDeleteMedia"
+        style="@style/context_menu_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:text="@string/delete" />
+
+    <Button
+        android:id="@+id/btnShareMedia"
+        style="@style/context_menu_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:text="@string/share" />
+    
+</LinearLayout>

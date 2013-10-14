@@ -17,4 +17,30 @@
         android:layout_height="wrap_content"
         android:text="@string/ok" />
 
+    <LinearLayout
+        android:id="@+id/textarea_cancel_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/textarea_cancel"
+            style="@style/button_c"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/cancel"
+            android:textAllCaps="true" />
+
+        <Button
+            android:id="@+id/textarea_save"
+            style="@style/button_d"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/save"
+            android:textAllCaps="true" />
+
+    </LinearLayout>
+
 </LinearLayout>
