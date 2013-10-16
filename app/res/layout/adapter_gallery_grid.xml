@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.witness.iwitness.app.views.SquareFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<org.witness.iwitness.app.views.SquareFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/org.witness.iwitness"
     android:id="@+id/gallery_thumb_holder"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,7 +18,9 @@
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/ic_launcher"
+        app:rounding_radius="6dp"
+         />
 
     <CheckBox
         android:id="@+id/chkSelect"

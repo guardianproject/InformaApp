@@ -8,7 +8,7 @@
     </declare-styleable>
     
     <declare-styleable name="RoundedImageView">
-        <attr name="rounding_radius" format="integer" />
+        <attr name="rounding_radius" format="dimension" />
     </declare-styleable>
     
     <declare-styleable name="DropdownSpinner">
