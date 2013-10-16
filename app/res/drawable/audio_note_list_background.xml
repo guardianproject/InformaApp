@@ -9,7 +9,7 @@
         android:bottom="0dp"
         >
         <shape android:shape="rectangle">
-		    <solid android:color="@color/grey_light_light" />
+		    <solid android:color="#ffe8e8e8" />
 		</shape>
 	</item>
 	
@@ -22,7 +22,7 @@
         <shape android:shape="rectangle">
 		        	<gradient
         android:startColor="@color/grey_medium_light"
-        android:endColor="@color/grey_light_light"
+        android:endColor="#ffe8e8e8"
         android:angle="270"/>
 		</shape>
 	</item>
@@ -35,7 +35,7 @@
         >
         <shape android:shape="rectangle">
 		        	<gradient
-        android:startColor="@color/grey_light_light"
+        android:startColor="#ffe8e8e8"
         android:endColor="@color/grey_medium_light"
         android:angle="270"/>
 		</shape>
