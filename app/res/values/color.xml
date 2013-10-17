@@ -33,8 +33,10 @@
     <color name="context_menu_background">#a0444444</color>
     <color name="context_menu_background_selected">#ff444444</color>
     
-    <color name="tag_unselected">#80231f20</color>
-    <color name="tag_selected">#80c03d2c</color>
+    <color name="tag_unselected">#E14AAEE2</color>
+    <color name="tag_unselected_outline">#FF0E6788</color>
+    <color name="tag_selected">#E10E6788</color>
+    <color name="tag_selected_outline">#FF183743</color>
     
     <color name="recorder_button_background">#E20F00</color>
     <color name="recorder_button_text">#ffffff</color>

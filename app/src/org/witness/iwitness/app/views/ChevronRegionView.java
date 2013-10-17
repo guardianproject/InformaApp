@@ -88,18 +88,22 @@ public class ChevronRegionView extends IRegionDisplay
 		mPath.lineTo(rect.left, rect.top);
 		mPath.close();
 
+		int color = this.getContext().getResources().getColor(R.color.tag_unselected_outline);
+		if (mIsActive)
+			color = this.getContext().getResources().getColor(R.color.tag_selected_outline);
+
 		mPaint = new Paint();
 		mPaint.setAntiAlias(true);
-		mPaint.setColor(Color.BLACK);
+		mPaint.setColor(color);
 		mPaint.setStyle(Paint.Style.FILL);
-		mPaint.setStrokeWidth(3);
+		mPaint.setStrokeWidth(0);
 		mPaint.setStrokeJoin(Paint.Join.ROUND); // set the join to round you
 												// want
 		mPaint.setStrokeCap(Paint.Cap.ROUND); // set the paint cap to round too
 		mPaint.setPathEffect(new CornerPathEffect(radius)); // set the path
 															// effect when they
 
-		int color = this.getContext().getResources().getColor(R.color.tag_unselected);
+		color = this.getContext().getResources().getColor(R.color.tag_unselected);
 		if (mIsActive)
 			color = this.getContext().getResources().getColor(R.color.tag_selected);
 		mShader = new LinearGradient(0, 0, 0, getHeight(), color, color, Shader.TileMode.CLAMP);
