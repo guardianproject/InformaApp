@@ -1,99 +1,81 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/info.guardianproject.bigbuffalo"
+    android:id="@+id/llRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/trans_black"
     android:orientation="vertical" >
 
-    <LinearLayout
-        android:id="@+id/wipe_settings_holder"
+    <FrameLayout
+        android:id="@+id/frameRoot"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:orientation="horizontal"
-        android:weightSum="1" >
-
-        <Button
-            android:id="@+id/wipe_change_settings"
-            style="@style/button_f"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="@string/change_settings" />
-
-        <Button
-            android:id="@+id/wipe_cancel"
-            style="@style/button_f"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="@string/cancel" />
-    </LinearLayout>
-    
-    <Button
-        android:id="@+id/wipe_logout"
-        style="@style/button_f"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/wipe_settings_holder"
-        android:layout_centerHorizontal="true"
-        android:drawableLeft="@drawable/ic_context_slide_left"
-        android:text="@string/log_out"
-        android:textSize="26sp" />
-
-    <View
-        android:id="@+id/wipe_trigger_buffer"
-        android:layout_width="match_parent"
-        android:layout_height="56dip"
-        android:layout_below="@+id/wipe_logout" />
-
-    <ScrollView
-        android:id="@+id/wipe_trigger"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/wipe_trigger_buffer" >
+        android:layout_height="match_parent" >
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#80000000"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="40dp" >
+
+                <TextView
+                    android:id="@+id/btnSettings"
+                    style="@style/PanicSettingsStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_weight="1"
+                    android:text="@string/panic_settings"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/btnCancel"
+                    style="@style/PanicCancelStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/panic_cancel"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textHint"
+                style="@style/PanicHintStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="0dip"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:gravity="bottom"
+                android:text="@string/panic_hint"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <ImageView
+                android:id="@+id/arrowSymbolView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:src="@drawable/ic_panic_down" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/radioactiveSymbolView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingLeft="60dip"
-            android:paddingRight="60dip" >
+            android:src="@drawable/ic_panic_lg" />
 
-            <TextView
-                style="@style/button_f"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/or"
-                android:gravity="center" />
+    </FrameLayout>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:scaleType="fitXY"
-                android:src="@drawable/ic_contextlg_panic" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dip"
-                android:layout_marginTop="10dip"
-                android:gravity="center"
-                android:text="@string/pull_down_to_wipe"
-                android:textColor="@drawable/white"
-                android:textSize="24sp"
-                android:textStyle="bold|italic" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:scaleType="fitXY"
-                android:src="@drawable/ic_contextlg_swipe_down" />
-        </LinearLayout>
-    </ScrollView>
-</RelativeLayout>
+</LinearLayout>

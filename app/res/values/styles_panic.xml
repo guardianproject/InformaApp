@@ -1,0 +1,22 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Panic activity styles -->
+    <!--                                               -->
+    <!--                                               -->
+
+    <style name="PanicHintStyle">
+		<item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textColor">#ffffff</item>
+	</style>
+	
+    <style name="PanicCancelStyle">
+		<item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:textColor">#ffffff</item>
+	</style>
+	
+    <style name="PanicSettingsStyle">
+		<item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:textColor">#ffffff</item>
+	</style>
+	
+</resources>

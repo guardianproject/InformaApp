@@ -1,5 +1,6 @@
 package org.witness.iwitness;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -39,10 +40,14 @@ import org.witness.iwitness.utils.Constants.Codes;
 import org.witness.iwitness.utils.Constants.Preferences;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -157,6 +162,22 @@ public class IWitness extends Activity implements InformaCamStatusListener
 				Logger.d(LOG, "coming back from VMM call WITH NOOOOO MEDIA, and i shoudl finish.");
 				setResult(resultCode, getIntent());
 				finish();
+				return;
+			}
+			else if (data != null && data.hasExtra(Codes.Extras.LOGOUT_USER) && data.getBooleanExtra(Codes.Extras.LOGOUT_USER, false))
+			{
+				Logger.d(LOG, "Logout the user and close.");
+				informaCam.setStatusListener(null);
+				informaCam.shutdown();
+				route = null;
+				setResult(resultCode, getIntent());
+				finish();
+				
+				if (data.hasExtra(Codes.Extras.PERFORM_WIPE) && data.getBooleanExtra(Codes.Extras.PERFORM_WIPE, false))
+				{
+					wipe();
+				}
+				
 				return;
 			}
 			
@@ -390,4 +411,53 @@ public class IWitness extends Activity implements InformaCamStatusListener
 		}).start();
 	}
 	
+	public void wipe()
+	{
+		String action = PreferenceManager.getDefaultSharedPreferences(this).getString(Preferences.Keys.PANIC_ACTION, "0");
+		boolean wipeEntireApp = (Integer.parseInt(action) == 1);
+		
+		dataWipe();
+		if (wipeEntireApp)
+		{
+			deleteApp();
+		}
+	}
+	
+	private void deleteApp()
+	{
+		Uri packageURI = Uri.parse("package:" + getApplicationContext().getPackageName());
+		Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageURI);
+		uninstallIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		getApplicationContext().startActivity(uninstallIntent);
+	}
+
+	private void dataWipe() {
+		Log.v(LOG, "Delete data");
+		//TODO
+//        File cache = getCacheDir();
+//        File appDir = new File(cache.getParent());
+//        if (appDir.exists()) {
+//            String[] children = appDir.list();
+//            for (String s : children) {
+//                if (!s.equals("lib")) {
+//                    deleteDir(new File(appDir, s));
+//                }
+//            }
+//        }
+    }
+
+    public boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+
+        return dir.delete();
+    }
+
 }
