@@ -145,4 +145,11 @@
     <string name="filter_videos">Videos only</string>
     <string name="filter_tagged">Tagged Items</string>
     <string name="filter_shared">Shared Items</string>
+    
+    <string name="panic_settings">Panic Settings</string>
+    <string name="panic_cancel">Cancel</string>
+    <string name="panic_hint">Swipe down to delete the app</string>
+    <string name="panic_hint_wipe_content">Swipe down to delete personal data</string>
+    <string name="panic_test_successful">Good job! In a real scenario, you would have successfully completed a wipe.</string>
+    
 </resources>

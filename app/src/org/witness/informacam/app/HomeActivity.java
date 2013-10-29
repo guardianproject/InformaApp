@@ -428,8 +428,7 @@ public class HomeActivity extends SherlockFragmentActivity implements HomeActivi
 	@Override
 	public void logoutUser()
 	{
-		getIntent().putExtra(Codes.Extras.LOGOUT_USER, true);
-		setResult(Activity.RESULT_CANCELED);
+		setResult(Activity.RESULT_CANCELED, getIntent().putExtra(Codes.Extras.LOGOUT_USER, true));
 		finish();
 	}
 
@@ -476,6 +475,7 @@ public class HomeActivity extends SherlockFragmentActivity implements HomeActivi
 				route = null;
 				break;
 			case Codes.Routes.WIPE:
+				getIntent().putExtra(Codes.Extras.PERFORM_WIPE, true);
 				logoutUser();
 				break;
 			}

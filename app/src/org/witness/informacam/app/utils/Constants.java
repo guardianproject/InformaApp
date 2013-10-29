@@ -85,6 +85,7 @@ public class Constants {
 			public static final String NUM_PROCESSING = org.witness.informacam.utils.Constants.Codes.Extras.NUM_PROCESSING;
 			public static final String NUM_COMPLETED = org.witness.informacam.utils.Constants.Codes.Extras.NUM_COMPLETED;
 			public static final String GENERATING_KEY = "generating_key";
+			public static final String PERFORM_WIPE = "wipe_app";
 		}
 	}
 

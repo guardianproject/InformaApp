@@ -1,5 +1,6 @@
 package org.witness.informacam.app;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -34,10 +35,15 @@ import org.witness.informacam.utils.Constants.Models.IUser;
 import org.witness.informacam.utils.InformaCamBroadcaster.InformaCamStatusListener;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Process;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -153,6 +159,22 @@ public class InformaActivity extends Activity implements InformaCamStatusListene
 				Logger.d(LOG, "coming back from VMM call WITH NOOOOO MEDIA, and i shoudl finish.");
 				setResult(resultCode, getIntent());
 				finish();
+				return;
+			}
+			else if (data != null && data.hasExtra(Codes.Extras.LOGOUT_USER) && data.getBooleanExtra(Codes.Extras.LOGOUT_USER, false))
+			{
+				Logger.d(LOG, "Logout the user and close.");
+				informaCam.setStatusListener(null);
+				informaCam.stopInforma();
+				route = null;
+				setResult(resultCode, getIntent());
+				finish();
+				
+				if (data.hasExtra(Codes.Extras.PERFORM_WIPE) && data.getBooleanExtra(Codes.Extras.PERFORM_WIPE, false))
+				{
+					wipe();
+				}
+				
 				return;
 			}
 			
@@ -386,4 +408,67 @@ public class InformaActivity extends Activity implements InformaCamStatusListene
 		}).start();
 	}
 	
+	public void wipe()
+	{
+		String action = PreferenceManager.getDefaultSharedPreferences(this).getString(Preferences.Keys.PANIC_ACTION, "0");
+		boolean wipeEntireApp = (Integer.parseInt(action) == 1);
+		
+		dataWipe();
+		if (wipeEntireApp)
+		{
+			deleteApp();
+		}
+		else
+		{
+			Process.killProcess(Process.myPid());
+		}
+	}
+	
+	private void deleteApp()
+	{
+		Uri packageURI = Uri.parse("package:" + getApplicationContext().getPackageName());
+		Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageURI);
+		uninstallIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		getApplicationContext().startActivity(uninstallIntent);
+	}
+
+	private void dataWipe() {
+		Log.v(LOG, "Delete data");
+        File cache = getCacheDir();
+        File appDir = new File(cache.getParent());
+        if (appDir.exists()) {
+            String[] children = appDir.list();
+            for (String s : children) {
+                if (!s.equals("lib")) {
+                    deleteDir(new File(appDir, s));
+                }
+            }
+        }
+        
+		// Delete all possible locations
+		if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+		{
+			appDir = getApplicationContext().getExternalFilesDir(null);
+			if (appDir.exists())
+				deleteDir(appDir);
+		}
+    }
+
+    public void deleteDir(File dir) {
+        if (dir != null && dir.exists() && dir.isDirectory()) {
+            File[] children = dir.listFiles();
+            for (File f : children) {
+            	if (f.isDirectory())
+            		deleteDir(f);
+            	else
+            	{
+            		f.delete();
+                	Log.v(LOG, "Deleted file " + f.getAbsolutePath());
+            	}
+            }
+            dir.delete();
+        	Log.v(LOG, "Deleted dir " + dir.getAbsolutePath());
+        }
+    }
+
 }
