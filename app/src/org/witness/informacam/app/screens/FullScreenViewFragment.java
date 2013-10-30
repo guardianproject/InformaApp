@@ -38,7 +38,7 @@ import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
-public class FullScreenViewFragment extends Fragment implements OnClickListener, OnTouchListener, IRegionDisplayListener, ODKFormListener, OnLongClickListener
+public class FullScreenViewFragment extends Fragment implements OnClickListener, OnTouchListener, IRegionDisplayListener, ODKFormListener
 {
 	public enum Mode
 	{
@@ -162,13 +162,11 @@ public class FullScreenViewFragment extends Fragment implements OnClickListener,
 					r.init(getActivity(), r.bounds, false, this);
 					IRegionDisplay regionDisplay = r.getRegionDisplay();
 					regionDisplay.setOnTouchListener(this);					
-					regionDisplay.setOnLongClickListener(this);					
 					regionDisplay.setSoundEffectsEnabled(false);
 					//regionDisplay.indexOnScreen = mediaHolder.getChildCount();
 
 					View newView = new ChevronRegionView(getActivity(), r, this);
 					newView.setOnTouchListener(this);
-					newView.setOnLongClickListener(this);
 					newView.setSoundEffectsEnabled(false);
 					mediaHolder.addView(newView);
 					// mediaHolder.addView(r.getRegionDisplay());
@@ -218,12 +216,10 @@ public class FullScreenViewFragment extends Fragment implements OnClickListener,
 
 		if (isNew) {
 			View newView = new ChevronRegionView(getActivity(), currentRegion, this);
-			newView.setOnLongClickListener(this);
 			newView.setSoundEffectsEnabled(false);
 			newView.setOnTouchListener(this);
 			mediaHolder.addView(newView);
 			// mediaHolder.addView(currentRegion.getRegionDisplay());
-			currentRegion.getRegionDisplay().setOnLongClickListener(this);
 			currentRegion.getRegionDisplay().setSoundEffectsEnabled(false);
 		}
 
@@ -269,15 +265,23 @@ public class FullScreenViewFragment extends Fragment implements OnClickListener,
 				mStartDragTagX = bounds.displayLeft;
 				mStartDragTagY = bounds.displayTop;
 				v.performClick();
+				((IRegionDisplay) v).update();
+				v.postInvalidate();
+				if (currentMode == Mode.Edit)
+				{
+					// Bring up the context menu
+					IRegionDisplay regionDisplay = (IRegionDisplay) v;
+					this.setCurrentRegion(regionDisplay.parent);
+					showTagContextMenu(regionDisplay);
 			}
 				break;
-
+			}
 			case MotionEvent.ACTION_MOVE:
 
 				final float x = event.getX() + v.getLeft();
 				final float y = event.getY() + v.getTop();
 
-				if (movingTag || Math.abs(x - mStartDragX) > 10 || Math.abs(y - mStartDragY) > 10)
+				if (currentMode == Mode.AddTags && (movingTag || Math.abs(x - mStartDragX) > 10 || Math.abs(y - mStartDragY) > 10))
 				{
 					if (!movingTag)
 					{
@@ -447,19 +451,6 @@ public class FullScreenViewFragment extends Fragment implements OnClickListener,
 		{
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public boolean onLongClick(View v)
-	{
-		if (v instanceof IRegionDisplay && currentMode == Mode.Edit)
-		{
-			IRegionDisplay regionDisplay = (IRegionDisplay) v;
-			this.setCurrentRegion(regionDisplay.parent);
-			showTagContextMenu(regionDisplay);
-			return true;
-		}
-		return false;
 	}
 
 	private void showTagFormPopup(IRegion region)
