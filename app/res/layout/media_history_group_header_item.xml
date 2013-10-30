@@ -1,0 +1,42 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/org.witness.informacam.app"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="60dp"
+    android:background="@android:color/white" >
+
+    <org.witness.informacam.app.views.CustomFontTextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_margin="10dp"
+        android:gravity="left|center_vertical"
+        android:text="@string/editor_history"
+        android:textColor="#231F20"
+        android:textSize="18sp"
+        app:font="Roboto-Bold" />
+
+    <org.witness.informacam.app.views.CustomFontTextView
+        android:id="@+id/tvSubTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/tvTitle"
+        android:layout_margin="10dp"
+        android:layout_toRightOf="@+id/tvTitle"
+        android:gravity="left|center_vertical"
+        android:text="@string/editor_history"
+        android:textColor="#808285"
+        android:textSize="12sp"
+        app:font="Roboto-Bold" />
+
+    <ImageView
+        android:id="@+id/indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="10dp"
+        android:src="@drawable/ic_context_open" />
+
+</RelativeLayout>

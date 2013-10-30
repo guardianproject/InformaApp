@@ -126,7 +126,11 @@
     <string name="editor_form_edit">Tag Info</string>
     <string name="editor_write_text">Write Text</string>
 	<string name="editor_save_text">SAVE TEXT</string>
-	    
+	<string name="editor_history">History</string>
+	<string name="editor_image_taken">TAKEN %1$s</string>
+	<string name="editor_history_shared">Shared</string>
+	<string name="editor_history_exported">Shared securely</string>
+			
     <string name="audio_saved_saved">Recording saved.</string>
     <string name="audio_saved_info">Audio notes are for your reference only, and will not be shared.</string>
     <string name="audio_saved_ok">OKAY, THANKS!</string>

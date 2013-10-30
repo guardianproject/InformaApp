@@ -17,6 +17,7 @@ import org.witness.informacam.app.utils.Constants.EditorActivityListener;
 import org.witness.informacam.utils.Constants.Logger;
 import org.witness.informacam.utils.Constants.Models;
 import org.witness.informacam.app.utils.Constants.App.Editor.Forms;
+import org.witness.informacam.app.utils.adapters.MediaHistoryListAdapter;
 import org.witness.informacam.app.views.AudioNoteInfoView;
 import org.witness.informacam.models.forms.IForm;
 import org.witness.informacam.models.media.IMedia;
@@ -38,7 +39,9 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -48,7 +51,6 @@ public class OverviewFormFragment extends Fragment implements ODKFormListener, O
 {
 	View rootView;
 	Activity a;
-	TextView timeCaptured, location;
 	TextView notes;
 	EditText notesAnswerHolder; // Dummy EditText to hold notes
 	IForm form = null;
@@ -58,6 +60,11 @@ public class OverviewFormFragment extends Fragment implements ODKFormListener, O
 	private AudioNotePlayer mAudioPlayer;
 	private View rlAudio;
 	private boolean mIsEditable;
+	private ListView lvHistory;
+	private View historyHeader;
+	private boolean mShowingHistory;
+	private ImageView showHistoryIndicator;
+	private TextView historyHeaderSubTitle;
 	
 	private final static String LOG = App.LOG;
 
@@ -74,9 +81,14 @@ public class OverviewFormFragment extends Fragment implements ODKFormListener, O
 
 		rootView = li.inflate(R.layout.fragment_forms_overview, container, false);
 
-		timeCaptured = (TextView) rootView.findViewById(R.id.media_time_captured);
-		location = (TextView) rootView.findViewById(R.id.media_details_location);
-
+		historyHeader = rootView.findViewById(R.id.historyHeader);
+		historyHeader.setOnClickListener(this);
+		historyHeaderSubTitle = (TextView) historyHeader.findViewById(R.id.tvSubTitle);
+		showHistoryIndicator = (ImageView) rootView.findViewById(R.id.indicator);
+		lvHistory = (ListView) rootView.findViewById(R.id.lvHistory);
+		lvHistory.setVisibility(View.GONE);
+		mShowingHistory = false;
+		
 		notes = (TextView) rootView.findViewById(R.id.media_notes);
 		notes.setText("");
 		notesAnswerHolder = (EditText) rootView.findViewById(R.id.media_notes_edit); // new EditText(container.getContext());
@@ -127,53 +139,12 @@ public class OverviewFormFragment extends Fragment implements ODKFormListener, O
 	{
 		IMedia media = ((EditorActivityListener) a).media();
 
-		// int displayNumMessages = 0;
-		// if (((EditorActivityListener) a).media().messages != null &&
-		// ((EditorActivityListener) a).media().messages.size() > 0)
-		// {
-		// displayNumMessages = ((EditorActivityListener)
-		// a).media().messages.size();
-		// }
-		// messagesHolder.setText(a.getResources().getString(R.string.x_messages,
-		// displayNumMessages, (displayNumMessages == 1 ? "" : "s")));
-
 		String[] dateAndTime = TimeUtility.millisecondsToDatestampAndTimestamp(((EditorActivityListener) a).media().dcimEntry.timeCaptured);
-		timeCaptured.setText(dateAndTime[0] + " " + dateAndTime[1]);
-
-		// if (((EditorActivityListener) a).media().alias != null)
-		// {
-		// alias.setText(((EditorActivityListener) a).media().alias);
-		// }
-
-//		if (media.dcimEntry.exif.location != null && media.dcimEntry.exif.location != new float[] { 0.0f, 0.0f })
-//		{
-//			location.setText(a.getString(R.string.x_location, media.dcimEntry.exif.location[0], media.dcimEntry.exif.location[1]));
-//		}
-//		else
-//		{
-//			location.setText(a.getString(R.string.location_unknown));
-//		}
-
-		location.setText(a.getString(R.string.shared_never));
-		List<INotification> listNotifications = InformaCam.getInstance().notificationsManifest.sortBy(Models.INotificationManifest.Sort.DATE_DESC);
-		for (INotification n : listNotifications)
-		{
-			if (media._id.equals(n.mediaId))
-			{
-				if ((n.type == Models.INotification.Type.SHARED_MEDIA || n.type == Models.INotification.Type.EXPORTED_MEDIA) &&
-					n.taskComplete)
-				{
-					Date date = new Date(n.timestamp);
-					location.setText(UIHelpers.dateDiffDisplayString(date, a, 
-							R.string.shared_never, R.string.shared_recently,
-							R.string.shared_minutes, R.string.shared_minute,
-							R.string.shared_hours, R.string.shared_hour,
-							R.string.shared_days, R.string.shared_day));
-					break;
-				}
-			}
-		}
 		
+		historyHeaderSubTitle.setText(getString(R.string.editor_image_taken, dateAndTime[0] + " " + dateAndTime[1]));
+
+		List<INotification> listNotifications = InformaCam.getInstance().notificationsManifest.sortBy(Models.INotificationManifest.Sort.DATE_DESC);
+		lvHistory.setAdapter(new MediaHistoryListAdapter(a, media._id, listNotifications));	
 	}
 
 	private void initForms()
@@ -327,6 +298,20 @@ public class OverviewFormFragment extends Fragment implements ODKFormListener, O
 				mAudioPlayer = new AudioNotePlayer(a, view);
 				mAudioPlayer.toggle();
 			}
+		}
+		else if (v == historyHeader)
+		{
+			if (mShowingHistory)
+			{
+				this.showHistoryIndicator.setImageResource(R.drawable.ic_context_open);
+				this.lvHistory.setVisibility(View.GONE);
+			}
+			else
+			{
+				this.showHistoryIndicator.setImageResource(R.drawable.ic_context_close);
+				this.lvHistory.setVisibility(View.VISIBLE);
+			}
+			mShowingHistory = !mShowingHistory;
 		}
 	}
 

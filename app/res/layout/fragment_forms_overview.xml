@@ -1,77 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/org.witness.informacam.app"
+    android:id="@+id/flRoot"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1" >
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/rlAudio"
+            android:layout_width="match_parent"
+            android:layout_height="94dp" >
+
+            <LinearLayout
+                android:id="@+id/llAudioFiles"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="@drawable/audio_note_list_background"
+                android:orientation="horizontal"
+                android:scrollbars="horizontal" >
+            </LinearLayout>
+
+            <SeekBar
+                android:id="@+id/sbAudio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true" />
+        </RelativeLayout>
 
         <TextView
-            android:id="@+id/media_time_captured"
-            style="@style/EditorMediaTimeStyle"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_weight="0.5"
-            android:gravity="left|center_vertical"
-            android:text="13 Feb 2013 10:27 PM" />
+            android:id="@+id/media_notes"
+            style="@style/EditorTopLevelNote"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="top|left"
+            android:text="Medium Text"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <TextView
-            android:id="@+id/media_details_location"
-            style="@style/EditorMediaInfoStyle"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:gravity="right|center_vertical"
-            android:text="Shared 3 days ago" />
+        <EditText
+            android:id="@+id/media_notes_edit"
+            style="@style/EditorTopLevelNote"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="top|left"
+            android:layout_weight="1"
+            android:background="@null"
+            android:gravity="top|left"
+            android:text="Medium Text"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/rlAudio"
-        android:layout_width="match_parent"
-        android:layout_height="94dp" >
-
-        <LinearLayout
-            android:id="@+id/llAudioFiles"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:background="@drawable/audio_note_list_background"
-            android:orientation="horizontal"
-            android:scrollbars="horizontal" >
-        </LinearLayout>
-
-        <SeekBar
-            android:id="@+id/sbAudio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true" />
-
-    </RelativeLayout>
-
-    <TextView
-        android:id="@+id/media_notes"
-        style="@style/EditorTopLevelNote"
+    <LinearLayout
+        android:id="@+id/rlHistory"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="top|left"
-        android:text="Medium Text"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:orientation="vertical" >
 
-    <EditText
-        android:id="@+id/media_notes_edit"
-        style="@style/EditorTopLevelNote"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="top|left"
-        android:layout_weight="1"
-        android:background="@null"
-        android:gravity="top|left"
-        android:text="Medium Text"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        <include
+            android:id="@+id/historyHeader"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            layout="@layout/media_history_group_header_item" />
 
-</LinearLayout>
+        <ListView
+            android:id="@+id/lvHistory"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#ffffffff"
+            android:divider="@drawable/media_history_divider"
+            android:dividerHeight="1dp"
+            android:visibility="gone" >
+
+        </ListView>
+
+        <View
+            android:id="@+id/dividerLine"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@drawable/media_history_main_divider" />
+
+    </LinearLayout>
+
+</FrameLayout>

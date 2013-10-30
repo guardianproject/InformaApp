@@ -1,0 +1,33 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/org.witness.informacam.app"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="60dp" >
+
+    <org.witness.informacam.app.views.CustomFontTextView
+        android:id="@+id/tvDestination"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_margin="10dp"
+        android:gravity="left|center_vertical"
+        android:text="@string/editor_history"
+        android:textColor="#231F20"
+        android:textSize="15sp"
+        app:font="Roboto-Regular" />
+
+    <org.witness.informacam.app.views.CustomFontTextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="10dp"
+        android:gravity="left|center_vertical"
+        android:text="@string/editor_history"
+        android:textColor="#231F20"
+        android:textSize="15sp"
+        app:font="Roboto-Regular" />
+
+</RelativeLayout>
+
