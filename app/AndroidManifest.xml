@@ -132,7 +132,9 @@
         <activity
             android:name="org.witness.informacam.app.WipeActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Transparent"
+            />
         <activity
             android:name="org.witness.informacam.app.PreferencesActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

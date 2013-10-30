@@ -33,8 +33,8 @@ public class PreferencesActivity extends SherlockPreferenceActivity implements O
 		
 		addPreferencesFromResource(R.xml.preferences);
 		
-		lockScreenMode = (ListPreference) findPreference(Preferences.Keys.LOCK_SCREEN_MODE);
-		updateSummaryWithChoice(lockScreenMode, lockScreenMode.getValue(), getResources().getStringArray(R.array.lockScreenOptions_));
+//		lockScreenMode = (ListPreference) findPreference(Preferences.Keys.LOCK_SCREEN_MODE);
+//		updateSummaryWithChoice(lockScreenMode, lockScreenMode.getValue(), getResources().getStringArray(R.array.lockScreenOptions_));
 
 		language = (ListPreference) findPreference(Preferences.Keys.LANGUAGE);
 		updateSummaryWithChoice(language, language.getValue(), getResources().getStringArray(R.array.languages_));
@@ -62,9 +62,10 @@ public class PreferencesActivity extends SherlockPreferenceActivity implements O
 	
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		if (key.equals(Preferences.Keys.LOCK_SCREEN_MODE)) {
-			updateSummaryWithChoice(lockScreenMode, sharedPreferences.getString(key, "1"), getResources().getStringArray(R.array.lockScreenOptions_));
-		} else if(key.equals(Preferences.Keys.LANGUAGE)) {
+//		if (key.equals(Preferences.Keys.LOCK_SCREEN_MODE)) {
+//			updateSummaryWithChoice(lockScreenMode, sharedPreferences.getString(key, "1"), getResources().getStringArray(R.array.lockScreenOptions_));
+//		} else
+		if(key.equals(Preferences.Keys.LANGUAGE)) {
 			updateSummaryWithChoice(language, sharedPreferences.getString(key, "0"), getResources().getStringArray(R.array.languages_));
 		} else if(key.equals(Preferences.Keys.ORIGINAL_IMAGE_HANDLING)) {
 			updateSummaryWithChoice(originalImage, sharedPreferences.getString(key, "0"), getResources().getStringArray(R.array.originalImageOptions_));
