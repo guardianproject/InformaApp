@@ -50,6 +50,7 @@ public class SharePopup {
 
 	InformaCam informaCam;
 
+	View tvTitleShareOrg, divider1, tvTitleShare, divider2;
 	ListView mLvItems;
 	ListView mLvItemsOrg;
 	ProgressBar inProgressBar;
@@ -89,6 +90,12 @@ public class SharePopup {
 				.findViewById(R.id.share_in_progress_root);
 		inProgressBar = (ProgressBar) alert
 				.findViewById(R.id.share_in_progress_bar);
+		
+		tvTitleShare = alert.findViewById(R.id.tvTitleShare);
+		tvTitleShareOrg = alert.findViewById(R.id.tvTitleShareOrg);
+		divider1 = alert.findViewById(R.id.divider1);
+		divider2 = alert.findViewById(R.id.divider2);
+		
 		li = LayoutInflater.from(a);
 		initLayout();
 
@@ -190,8 +197,20 @@ public class SharePopup {
 	}
 
 	private void export() {
+		mLvItemsOrg.setVisibility(View.GONE);
 		mLvItems.setVisibility(View.GONE);
 		inProgressRoot.setVisibility(View.VISIBLE);
+		if (sendTo != null)
+		{
+			tvTitleShareOrg.setVisibility(View.GONE);
+			divider1.setVisibility(View.GONE);
+		}
+		else
+		{
+			tvTitleShare.setVisibility(View.GONE);
+			divider2.setVisibility(View.GONE);
+		}
+		
 		new Thread(new Runnable() {
 			@Override
 			public void run() {

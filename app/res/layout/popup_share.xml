@@ -24,6 +24,7 @@
         </ListView>
 
         <View
+            android:id="@+id/divider1"
             android:layout_width="match_parent"
             android:layout_height="4dp"
             android:layout_alignLeft="@+id/tvTitleShareOrg"
@@ -48,17 +49,18 @@
         </ListView>
 
         <View
+            android:id="@+id/divider2"
             android:layout_width="match_parent"
             android:layout_height="4dp"
             android:layout_alignLeft="@+id/tvTitleShare"
             android:layout_below="@+id/tvTitleShare"
-            android:background="@android:color/black" />        
+            android:background="@android:color/black" />
         
         <include
             android:id="@+id/share_in_progress_root"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvTitleShareOrg"
+            android:layout_below="@+id/tvTitleShare"
             android:layout_marginTop="10dp"
             layout="@layout/popup_share_in_progress"
             android:visibility="gone" />

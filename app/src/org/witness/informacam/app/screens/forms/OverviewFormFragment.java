@@ -4,7 +4,6 @@ import info.guardianproject.odkparser.Constants.RecorderState;
 import info.guardianproject.odkparser.FormWrapper.ODKFormListener;
 
 import java.io.FileNotFoundException;
-import java.util.Date;
 import java.util.List;
 
 import org.witness.informacam.InformaCam;
@@ -18,6 +17,7 @@ import org.witness.informacam.utils.Constants.Logger;
 import org.witness.informacam.utils.Constants.Models;
 import org.witness.informacam.app.utils.Constants.App.Editor.Forms;
 import org.witness.informacam.app.utils.adapters.MediaHistoryListAdapter;
+import org.witness.informacam.app.views.AdapteredLinearLayout;
 import org.witness.informacam.app.views.AudioNoteInfoView;
 import org.witness.informacam.models.forms.IForm;
 import org.witness.informacam.models.media.IMedia;
@@ -41,7 +41,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -60,7 +59,7 @@ public class OverviewFormFragment extends Fragment implements ODKFormListener, O
 	private AudioNotePlayer mAudioPlayer;
 	private View rlAudio;
 	private boolean mIsEditable;
-	private ListView lvHistory;
+	private AdapteredLinearLayout lvHistory;
 	private View historyHeader;
 	private boolean mShowingHistory;
 	private ImageView showHistoryIndicator;
@@ -82,10 +81,9 @@ public class OverviewFormFragment extends Fragment implements ODKFormListener, O
 		rootView = li.inflate(R.layout.fragment_forms_overview, container, false);
 
 		historyHeader = rootView.findViewById(R.id.historyHeader);
-		historyHeader.setOnClickListener(this);
 		historyHeaderSubTitle = (TextView) historyHeader.findViewById(R.id.tvSubTitle);
 		showHistoryIndicator = (ImageView) rootView.findViewById(R.id.indicator);
-		lvHistory = (ListView) rootView.findViewById(R.id.lvHistory);
+		lvHistory = (AdapteredLinearLayout) rootView.findViewById(R.id.lvHistory);
 		lvHistory.setVisibility(View.GONE);
 		mShowingHistory = false;
 		
@@ -145,6 +143,17 @@ public class OverviewFormFragment extends Fragment implements ODKFormListener, O
 
 		List<INotification> listNotifications = InformaCam.getInstance().notificationsManifest.sortBy(Models.INotificationManifest.Sort.DATE_DESC);
 		lvHistory.setAdapter(new MediaHistoryListAdapter(a, media._id, listNotifications));	
+		
+		if (lvHistory.getAdapter().getCount() == 0)
+		{
+			historyHeader.setOnClickListener(null);
+			showHistoryIndicator.setVisibility(View.GONE);
+		}
+		else
+		{
+			historyHeader.setOnClickListener(this);
+			showHistoryIndicator.setVisibility(View.VISIBLE);
+		}
 	}
 
 	private void initForms()
