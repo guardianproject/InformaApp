@@ -14,6 +14,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.witness.informacam.InformaCam;
 import org.witness.informacam.app.R;
 import org.witness.informacam.app.screens.FullScreenViewFragment;
+import org.witness.informacam.app.utils.Constants;
 import org.witness.informacam.app.utils.Constants.EditorActivityListener;
 import org.witness.informacam.models.media.IRegion;
 import org.witness.informacam.models.media.IRegionBounds;
@@ -116,7 +117,7 @@ OnRangeSeekBarChangeListener<Integer> {
 							try {
 								mVideoServerSocket = new ServerSocket (mLocalHostPort);
 							} catch (IOException e) {
-								Log.e(LOG,"unable to open server socket",e);
+								Log.e(Constants.App.TAG,"unable to open server socket",e);
 								return;
 							}
 						}
@@ -231,7 +232,7 @@ OnRangeSeekBarChangeListener<Integer> {
 					
 					// TODO: update region display with new bounds from trail
 					IRegionBounds rb = ((IVideoRegion) r).getBoundsAtTime(mediaPlayer.getCurrentPosition());
-					Log.d(LOG, rb.asJson().toString());
+					
 				} else {
 					rd.setVisibility(View.GONE);
 				}
@@ -268,7 +269,7 @@ OnRangeSeekBarChangeListener<Integer> {
 				mVideoServerSocket = null;
 				mServerThread = null;
 			} catch (IOException e) {
-				Log.e(LOG,"error shutting down video server",e);
+				Log.e(Constants.App.TAG,"error shutting down video server",e);
 			}
 		}
 	}
@@ -293,13 +294,13 @@ OnRangeSeekBarChangeListener<Integer> {
 		
 		surfaceHolder = videoView.getHolder();
 		
-		Log.d(LOG, "surface holder dims: " + surfaceHolder.getSurfaceFrame().width() + " x " + surfaceHolder.getSurfaceFrame().height());
+		//Log.d(LOG, "surface holder dims: " + surfaceHolder.getSurfaceFrame().width() + " x " + surfaceHolder.getSurfaceFrame().height());
 		surfaceHolder.addCallback(this);
 		
 		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
 			surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		
-		Log.d(LOG, "video view dims: " + videoView.getWidth() + " x " + videoView.getHeight());
+		//Log.d(LOG, "video view dims: " + videoView.getWidth() + " x " + videoView.getHeight());
 		
 		videoControlsHolder = (LinearLayout) mediaHolder_.findViewById(R.id.video_controls_holder);		
 
@@ -340,13 +341,11 @@ OnRangeSeekBarChangeListener<Integer> {
 
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-		Log.v(LOG, "surfaceChanged called");
 		
 	}
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		Log.v(LOG, "surfaceCreated Called");
 		
 		surfaceHolder = holder;
 		
@@ -366,7 +365,7 @@ OnRangeSeekBarChangeListener<Integer> {
         	   }
         	   catch (Exception e)
         	   {
-        		   Log.e(LOG,"error initVideo()",e);
+        		   Log.e(Constants.App.TAG,"error initVideo()",e);
         		   return false;
         	   }
            }
@@ -386,8 +385,7 @@ OnRangeSeekBarChangeListener<Integer> {
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		Log.v(LOG, "surfaceDestroyed called");
-
+	
 		if (mediaPlayer != null)
 		{
 			mediaPlayer.stop();
@@ -399,7 +397,8 @@ OnRangeSeekBarChangeListener<Integer> {
 
 	@Override
 	public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
-		Log.v(LOG, "onVideoSizeChanged called, new width: " + width + ", new height: " + height);
+		//Log.v(LOG, "onVideoSizeChanged called, new width: " + width + ", new height: " + height);
+		
 	}
 
 	@Override
@@ -410,8 +409,6 @@ OnRangeSeekBarChangeListener<Integer> {
 
 	@Override
 	public void onPrepared(MediaPlayer mp) {
-		
-		Log.d(LOG,"mediaplayer prepared");
 		
 		 initVideoPost ();
 
@@ -424,13 +421,14 @@ OnRangeSeekBarChangeListener<Integer> {
 	@Override
 	public void onBufferingUpdate(MediaPlayer mp, int percent) {
 		mBufferPercent = percent;
-		Log.d(LOG,"buffering " + percent + "%");
+		
+		//Log.d(LOG,"buffering " + percent + "%");
 	}
 
 	@Override
 	public boolean onError(MediaPlayer mp, int whatInfo, int extra) {
 		
-		Log.v(LOG, "onError called " + whatInfo + " (extra: " + extra + ")");
+	//	Log.v(LOG, "onError called " + whatInfo + " (extra: " + extra + ")");
 		
 		if (whatInfo == -38 || whatInfo == 1)
 		{
@@ -480,13 +478,13 @@ OnRangeSeekBarChangeListener<Integer> {
 
 	@Override
 	public void onCompletion(MediaPlayer mp) {
-		Log.d(LOG, "onCompletion called");
+		//Log.d(LOG, "onCompletion called");
 
 	}
 
 	@Override
 	public boolean onInfo(MediaPlayer mp, int what, int extra) {
-		Log.d(LOG, "onInfo called: what=" + what + "; extra=" + extra);
+	//	Log.d(LOG, "onInfo called: what=" + what + "; extra=" + extra);
 		return false;
 	}
 
@@ -572,7 +570,7 @@ OnRangeSeekBarChangeListener<Integer> {
 
 	@Override
 	public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
-		Log.d(LOG, "new range: " + minValue + " - " + maxValue);
+		//Log.d(LOG, "new range: " + minValue + " - " + maxValue);
 		if(currentRegion != null) {
 			currentRegion.bounds.startTime = minValue;
 			currentRegion.bounds.endTime = maxValue;
@@ -587,7 +585,7 @@ OnRangeSeekBarChangeListener<Integer> {
 	
 	@Override
 	public int[] getSpecs() {
-		Log.d(LOG, "RECALCULATING FOR VIDEO");
+		//Log.d(LOG, "RECALCULATING FOR VIDEO");
 		List<Integer> specs = new ArrayList<Integer>(Arrays.asList(ArrayUtils.toObject(super.getSpecs())));
 		
 		int[] locationInWindow = new int[2];
@@ -600,7 +598,7 @@ OnRangeSeekBarChangeListener<Integer> {
 		specs.add(videoView.getWidth());
 		specs.add(videoView.getHeight());
 		
-		Log.d(LOG, "position on screen : " + locationInWindow[0] + ", " + locationInWindow[1]);
+		//Log.d(LOG, "position on screen : " + locationInWindow[0] + ", " + locationInWindow[1]);
 		
 		return ArrayUtils.toPrimitive(specs.toArray(new Integer[specs.size()]));
 	}

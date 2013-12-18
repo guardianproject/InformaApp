@@ -127,7 +127,7 @@ public class Constants {
 		}
 
 		public class Editor {
-			public final static String LOG = "******************** iWitness : EditorActivity ********************";
+		//	public final static String LOG = "******************** iWitness : EditorActivity ********************";
 			public static final int ROUTE_CODE = Codes.Routes.EDITOR;
 
 			public class Mode {

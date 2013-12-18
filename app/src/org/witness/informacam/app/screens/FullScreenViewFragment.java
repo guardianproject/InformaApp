@@ -4,13 +4,13 @@ import info.guardianproject.odkparser.FormWrapper.ODKFormListener;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.json.JSONException;
 import org.witness.informacam.app.EditorActivity;
 import org.witness.informacam.app.R;
 import org.witness.informacam.app.screens.editors.FullScreenVideoViewFragment;
 import org.witness.informacam.app.screens.popups.PopupClickListener;
+import org.witness.informacam.app.utils.Constants;
 import org.witness.informacam.app.utils.Constants.App;
 import org.witness.informacam.app.utils.Constants.EditorActivityListener;
 import org.witness.informacam.app.views.ChevronRegionView;
@@ -65,7 +65,6 @@ public class FullScreenViewFragment extends Fragment implements OnTouchListener,
 	private float mStartDragTagY;
 	private boolean movingTag = false;
 
-	protected final static String LOG = App.Editor.LOG;
 
 	@Override
 	public void onResume() {
@@ -200,7 +199,6 @@ public class FullScreenViewFragment extends Fragment implements OnTouchListener,
 
 	protected void setCurrentRegion(IRegion region, boolean isNew)
 	{
-		Log.d(LOG, "this region: " + region.asJson().toString());
 
 		currentRegion = region;
 		currentRegion.getRegionDisplay().setOnTouchListener(this);
@@ -314,8 +312,7 @@ public class FullScreenViewFragment extends Fragment implements OnTouchListener,
 				}
 				catch (JSONException e)
 				{
-					Log.e(LOG, e.toString());
-					e.printStackTrace();
+					Log.e(Constants.App.TAG,"error parsing region json",e);
 				}
 			}
 			return true;
@@ -431,14 +428,9 @@ public class FullScreenViewFragment extends Fragment implements OnTouchListener,
 
 	private void showTagFormPopup(IRegion region)
 	{
-		try
-		{
+	
 			((EditorActivity) getActivity()).showTagForm(region);
-		}
-		catch (Exception e)
-		{
-			Log.e(LOG,"error showing tag form",e);
-		}
+	
 	}
 
 	public void constrainBoundsToImage(IRegionBounds bounds)

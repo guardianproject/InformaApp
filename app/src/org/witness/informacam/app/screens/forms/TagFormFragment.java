@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import org.witness.informacam.InformaCam;
 import org.witness.informacam.app.EditorActivity;
 import org.witness.informacam.app.R;
+import org.witness.informacam.app.utils.Constants;
 import org.witness.informacam.app.utils.Constants.App.Editor;
 import org.witness.informacam.app.utils.Constants.App.Editor.Forms;
 import org.witness.informacam.app.utils.Constants.EditorActivityListener;
@@ -37,9 +38,7 @@ public class TagFormFragment extends Fragment implements ODKFormListener
 	FormUtility formUtility;
 
 	Handler h;
-
-	private final static String LOG = Editor.LOG;
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -85,7 +84,6 @@ public class TagFormFragment extends Fragment implements ODKFormListener
 	public void onDetach()
 	{
 		super.onDetach();
-		Log.d(LOG, "SHOULD SAVE FORM STATE!");
 	}
 
 	public boolean initTag(final IRegion region)
@@ -120,7 +118,6 @@ public class TagFormFragment extends Fragment implements ODKFormListener
 					this.form.answerPath = new info.guardianproject.iocipher.File(((EditorActivityListener) a).media().rootFolder, "form_"
 							+ System.currentTimeMillis()).getAbsolutePath();
 					region.addForm(this.form);
-					Logger.d(LOG, ((EditorActivityListener) a).media().asJson().toString());
 				}
 				else if (this.formNote == null && form.namespace.equals(Forms.FreeText.TAG))
 				{
@@ -128,7 +125,6 @@ public class TagFormFragment extends Fragment implements ODKFormListener
 					this.formNote.answerPath = new info.guardianproject.iocipher.File(((EditorActivityListener) a).media().rootFolder, "form_t"
 							+ System.currentTimeMillis()).getAbsolutePath();
 					region.addForm(this.formNote);
-					Logger.d(LOG, ((EditorActivityListener) a).media().asJson().toString());
 				}
 			}
 		}
@@ -165,8 +161,6 @@ public class TagFormFragment extends Fragment implements ODKFormListener
 
 	public void saveTagFormData(final IRegion region)
 	{
-		Log.d(LOG, "saving form data for current region");
-
 		new Thread(new Runnable()
 		{
 			@Override
@@ -179,11 +173,10 @@ public class TagFormFragment extends Fragment implements ODKFormListener
 					form.answerAll();
 					form.save(new info.guardianproject.iocipher.FileOutputStream(form.answerPath));
 					((EditorActivityListener) a).media().save();
-					Logger.d(LOG, ((EditorActivityListener) a).media().asJson().toString());
 				}
 				catch (FileNotFoundException e)
 				{
-					Logger.e(LOG, e);
+					Logger.e("error opening file for answer path", e);
 				}
 			}
 		}).start();

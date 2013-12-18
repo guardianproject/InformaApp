@@ -24,7 +24,7 @@ public class VideoSeekBar extends SeekBar implements OnSeekBarChangeListener {
 	RangeSeekBar<Integer> endpointBar;
 	Context context;
 	
-	private final static String LOG = App.Editor.LOG;
+	private final static String LOG = App.TAG;
 	private boolean keepRunning = true;
 	
 	private Runnable progressRunnable = new Runnable() {
@@ -80,7 +80,6 @@ public class VideoSeekBar extends SeekBar implements OnSeekBarChangeListener {
 	}
 	
 	public void showEndpoints(IVideoRegion region) {
-		Log.d(LOG, "showing endpoints for " + region.asJson().toString());
 		
 		endpointBar.setVisibility(View.VISIBLE);
 		setVisibility(View.GONE);
@@ -103,13 +102,12 @@ public class VideoSeekBar extends SeekBar implements OnSeekBarChangeListener {
 
 	@Override
 	public void onStartTrackingTouch(SeekBar seekBar) {
-		Log.d(LOG, "start tracking touch");
+		
 		
 	}
 
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar) {
-		Log.d(LOG, "stop tracking touch");
 		
 	}
 }
