@@ -33,7 +33,7 @@ public class GalleryFilterAdapter extends BaseAdapter {
 		View view = convertView;
 		if (view == null)
 			view = LayoutInflater.from(mContext).inflate(
-					R.layout.sherlock_spinner_dropdown_item, parent, false);
+					android.R.layout.simple_spinner_dropdown_item, parent, false);
 
 		((TextView) view).setText((CharSequence) getItem(position));
 		return view;

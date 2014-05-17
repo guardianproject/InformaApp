@@ -36,6 +36,7 @@ import org.witness.informacam.utils.Constants.Models;
 import org.witness.informacam.utils.InformaCamBroadcaster.InformaCamStatusListener;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -46,6 +47,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -59,11 +61,8 @@ import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-
 @SuppressLint("HandlerLeak")
-public class HomeActivity extends SherlockFragmentActivity implements HomeActivityListener, InformaCamStatusListener, InformaCamEventListener,
+public class HomeActivity extends FragmentActivity implements HomeActivityListener, InformaCamStatusListener, InformaCamEventListener,
 		ListAdapterListener, OnMediaRecorderStopListener
 {
 	Intent init, route;
@@ -494,9 +493,9 @@ public class HomeActivity extends SherlockFragmentActivity implements HomeActivi
 	class TabPager extends FragmentStatePagerAdapter implements OnPageChangeListener
 	{
 
-		public TabPager(FragmentManager fm)
+		public TabPager(FragmentManager fragmentManager)
 		{
-			super(fm);
+			super(fragmentManager);
 		}
 
 		@Override
@@ -753,7 +752,7 @@ public class HomeActivity extends SherlockFragmentActivity implements HomeActivi
 
 	private void resetActionBar()
 	{
-		ActionBar actionBar = getSupportActionBar();
+		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setTitle(R.string.app_name);
 		actionBar.setDisplayShowHomeEnabled(true);

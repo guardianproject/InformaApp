@@ -17,13 +17,19 @@ import org.witness.informacam.models.notifications.INotification;
 import org.witness.informacam.utils.Constants.ListAdapterListener;
 import org.witness.informacam.utils.Constants.Models;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -36,14 +42,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
-
-public class GalleryFragment extends SherlockFragment implements
+public class GalleryFragment extends Fragment implements
 		OnItemClickListener, OnItemLongClickListener, ListAdapterListener,
 		OnItemSelectedListener {
 	View rootView;
@@ -349,7 +348,7 @@ public class GalleryFragment extends SherlockFragment implements
 		
 		mMenuItemBatchOperations = menu.findItem(R.id.menu_select);
 		
-		ActionBar actionBar = getSherlockActivity().getSupportActionBar();
+		ActionBar actionBar = getActivity().getActionBar();
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setTitle(R.string.home_gallery_title);
 		actionBar.setDisplayShowHomeEnabled(true);
@@ -368,7 +367,7 @@ public class GalleryFragment extends SherlockFragment implements
 			((HomeActivityListener) a).launchMain();
 			return true;
 		case R.id.menu_select: {
-			mActionMode = getSherlockActivity().startActionMode(
+			mActionMode = getActivity().startActionMode(
 					mActionModeSelect);
 			return true;
 		}

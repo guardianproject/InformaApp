@@ -35,10 +35,15 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -50,13 +55,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
-
-public class HomeFragment extends SherlockFragment implements ListAdapterListener, OnClickListener
+public class HomeFragment extends Fragment implements ListAdapterListener, OnClickListener
 {
 	View rootView;
 
@@ -261,7 +260,7 @@ public class HomeFragment extends SherlockFragment implements ListAdapterListene
 	
 			case R.id.menu_select:
 			{
-				mActionMode = getSherlockActivity().startActionMode(mActionModeSelect);
+				mActionMode = getActivity().startActionMode(mActionModeSelect);
 				return true;
 			}
 				

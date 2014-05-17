@@ -1,20 +1,18 @@
 package org.witness.informacam.app;
 
-import org.witness.informacam.app.R;
 import org.witness.informacam.app.utils.Constants.Preferences;
 import org.witness.informacam.utils.Constants.Models;
 
+import android.app.ActionBar;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceActivity;
+import android.view.MenuItem;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockPreferenceActivity;
-import com.actionbarsherlock.view.MenuItem;
-
-public class PreferencesActivity extends SherlockPreferenceActivity implements OnSharedPreferenceChangeListener {
+public class PreferencesActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 	ListPreference lockScreenMode, language, originalImage, panicAction;
 	
 	@SuppressWarnings("deprecation")
@@ -24,7 +22,7 @@ public class PreferencesActivity extends SherlockPreferenceActivity implements O
 		
 		setTitle(R.string.preferences);
 		
-		ActionBar actionBar = getSupportActionBar();
+		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setDisplayShowHomeEnabled(true);
 		actionBar.setDisplayHomeAsUpEnabled(false);

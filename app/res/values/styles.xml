@@ -4,7 +4,7 @@
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
-    <style name="AppBaseTheme" parent="Theme.Sherlock.Light.DarkActionBar">
+    <style name="AppBaseTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
@@ -109,50 +109,42 @@
         <item name="android:textColor">@drawable/white</item>
     </style>
     
-    <style name="EditorTheme" parent="Theme.Sherlock.Light.DarkActionBar">
-		<item name="actionBarStyle">@style/EditorActionBar</item>
+    <style name="EditorTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/EditorActionBar</item>
-    	<item name="actionModeBackground">@drawable/actionbar_actionmode_background</item>
     	<item name="android:actionModeBackground">@drawable/actionbar_actionmode_background</item>
         </style>
     
-    <style name="EditorActionBar" parent="@style/Widget.Sherlock.Light.ActionBar">
-    	<item name="background">@drawable/actionbar_background</item>
+    <style name="EditorActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
     	<item name="android:background">@drawable/actionbar_background</item>
-    	<item name="titleTextStyle">@style/EditorActionBarTitle</item>
     	<item name="android:titleTextStyle">@style/EditorActionBarTitle</item>
     </style>
 
-	<style name="EditorActionBarTitle" parent="@style/TextAppearance.Sherlock.Widget.ActionBar.Title">
+	<style name="EditorActionBarTitle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
     	<item name="android:textColor">@android:color/white</item>
 	</style>
 
-	<style name="HomeTheme" parent="Theme.Sherlock.Light.DarkActionBar">
-		<item name="actionBarStyle">@style/EditorActionBar</item>
+	<style name="HomeTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/EditorActionBar</item>
-    	<item name="actionModeBackground">@drawable/actionbar_actionmode_background</item>
     	<item name="android:actionModeBackground">@drawable/actionbar_actionmode_background</item>
-    	<item name="actionModeCloseDrawable">@drawable/ic_action_select</item>
     	<item name="android:actionModeCloseDrawable">@drawable/ic_action_select</item>
-		<item name="actionModeStyle">@style/HomeActionMode</item>
-        <item name="android:actionModeStyle">@style/HomeActionMode</item>
-    </style>
-       
-    <style name="HomeActionMode" parent="@style/Widget.Sherlock.ActionMode">
-    	<item name="titleTextStyle">@style/HomeActionModeTitle</item>
-    	<item name="android:titleTextStyle">@style/HomeActionModeTitle</item>
     </style>
     
-	<style name="HomeActionModeTitle" parent="@style/TextAppearance.Sherlock.Widget.ActionMode.Title">
+	<!-- 
+    <style name="HomeActionMode" parent="@android:style/Widget.Widget.Holo.ActionMode">
+    	<item name="android:titleTextStyle">@style/HomeActionModeTitle</item>
+    </style>
+     -->
+	<style name="HomeActionModeTitle" parent="@android:style/TextAppearance.Holo.Widget.ActionMode.Title">
     	<item name="android:textColor">@android:color/black</item>
 	</style>
 	
-	<style name="GallerySpinnerStyle" parent="@style/Widget.Sherlock.Spinner.DropDown.ActionBar">
+	<!-- 
+	<style name="GallerySpinnerStyle" parent="@android:style/Widget.Holo.Light.Spinner.DropDown.ActionBar">
     	<item name="android:background">@null</item>
     	<item name="android:textColor">@android:color/white</item>
 	</style>
-
-	<style name="GalleryFilterButtonStyle" parent="@style/Widget.Sherlock.ActionButton">	    
+ -->
+	<style name="GalleryFilterButtonStyle" parent="@android:style/Widget.Holo.Light.ActionButton">	    
 	</style>
 	
 	<style name="PopupInfoStyle">

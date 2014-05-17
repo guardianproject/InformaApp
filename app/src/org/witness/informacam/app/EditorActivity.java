@@ -7,6 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import org.witness.informacam.InformaCam;
+import org.witness.informacam.app.EditorActivity.ActivityActionMode;
 import org.witness.informacam.app.screens.FullScreenViewFragment;
 import org.witness.informacam.app.screens.editors.FullScreenImageViewFragment;
 import org.witness.informacam.app.screens.editors.FullScreenVideoViewFragment;
@@ -30,6 +31,7 @@ import org.witness.informacam.utils.Constants.Models;
 import org.witness.informacam.utils.Constants.Models.IMedia.MimeType;
 import org.witness.informacam.utils.InformaCamBroadcaster.InformaCamStatusListener;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -39,8 +41,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
@@ -51,13 +57,7 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-
-public class EditorActivity extends SherlockFragmentActivity implements EditorActivityListener, IRegionDisplayListener, InformaCamStatusListener, InformaCamEventListener
+public class EditorActivity extends FragmentActivity implements EditorActivityListener, IRegionDisplayListener, InformaCamStatusListener, InformaCamEventListener
 {
 	Intent init;
 
@@ -114,7 +114,7 @@ public class EditorActivity extends SherlockFragmentActivity implements EditorAc
 			toolbarBottom = findViewById(R.id.toolbar_bottom);
 			toolbarBottom.setVisibility(View.GONE);
 
-			actionBar = getSupportActionBar();
+			actionBar = getActionBar();
 
 			fm = getSupportFragmentManager();
 		}
@@ -245,11 +245,11 @@ public class EditorActivity extends SherlockFragmentActivity implements EditorAc
 	{
 		super.onCreateOptionsMenu(menu);
 		if (mActionMode == ActivityActionMode.Edit)
-			getSupportMenuInflater().inflate(R.menu.activity_edit_edit, menu);
+			getMenuInflater().inflate(R.menu.activity_edit_edit, menu);
 		else if (mActionMode == ActivityActionMode.EditText)
-			getSupportMenuInflater().inflate(R.menu.activity_edit_edit_text, menu);
+			getMenuInflater().inflate(R.menu.activity_edit_edit_text, menu);
 		else
-			getSupportMenuInflater().inflate(R.menu.activity_edit_normal, menu);
+			getMenuInflater().inflate(R.menu.activity_edit_normal, menu);
 		return true;
 	}
 
@@ -594,21 +594,21 @@ public class EditorActivity extends SherlockFragmentActivity implements EditorAc
 			rootForm.setVisibility(View.VISIBLE);
 			enableToolbar(false);
 			showToolbar(true);
-			getSupportActionBar().setTitle(R.string.editor_form_edit);
+			getActionBar().setTitle(R.string.editor_form_edit);
 			break;
 		case AddTags:
 			rootForm.setVisibility(View.GONE);
 			rootMain.setVisibility(View.VISIBLE);
 			enableToolbar(false);
 			showToolbar(true);
-			getSupportActionBar().setTitle(R.string.editor_tags_add);
+			getActionBar().setTitle(R.string.editor_tags_add);
 			break;
 		case EditText:
 			rootForm.setVisibility(View.GONE);
 			rootMain.setVisibility(View.VISIBLE);
 			enableToolbar(false);
 			showToolbar(false);
-			getSupportActionBar().setTitle(R.string.menu_edit);
+			getActionBar().setTitle(R.string.menu_edit);
 
 			rootMain.collapse();
 			
@@ -625,13 +625,13 @@ public class EditorActivity extends SherlockFragmentActivity implements EditorAc
 			rootMain.setVisibility(View.VISIBLE);
 			enableToolbar(true);
 			showToolbar(true);
-			getSupportActionBar().setTitle(R.string.menu_edit);
+			getActionBar().setTitle(R.string.menu_edit);
 			break;
 		default:
 			rootForm.setVisibility(View.GONE);
 			rootMain.setVisibility(View.VISIBLE);
 			showToolbar(false);
-			getSupportActionBar().setTitle(R.string.menu_view);
+			getActionBar().setTitle(R.string.menu_view);
 			break;
 		}
 	}

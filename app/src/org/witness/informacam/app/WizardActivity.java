@@ -12,7 +12,6 @@ import org.witness.informacam.app.screens.wizard.WizardSelectLanguage;
 import org.witness.informacam.app.screens.wizard.WizardTakePhoto;
 import org.witness.informacam.app.utils.Constants.App;
 import org.witness.informacam.app.utils.Constants.Codes;
-import org.witness.informacam.app.utils.Constants.Preferences;
 import org.witness.informacam.app.utils.Constants.WizardActivityListener;
 import org.witness.informacam.ui.SurfaceGrabberActivity;
 import org.witness.informacam.utils.Constants.Logger;
@@ -25,11 +24,10 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-
-public class WizardActivity extends SherlockFragmentActivity implements WizardActivityListener
+public class WizardActivity extends FragmentActivity implements WizardActivityListener
 {
 	private InformaCam informaCam;
 	private final static String LOG = App.Wizard.LOG;
