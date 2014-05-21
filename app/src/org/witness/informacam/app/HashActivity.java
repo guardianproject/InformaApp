@@ -77,8 +77,10 @@ public class HashActivity extends Activity {
 		
 		File fileMedia = new File(filePath);
 		
+		final String searchLink = "https://j3m.info/submissions/?hashes=" + hash;
+		
 		final String hashMessage = "The " + fileType + " '" + fileMedia.getName() + " has a pixelhash(" + hashType + ") of " + hash;
-		final String hashTag = "\n\nSearch for this file on our public notary: https://j3m.info/submissions/?hashes=" + hash + " #informacam";
+		final String hashTag = "\n\nSearch for this file on our public notary: " + searchLink + " #informacam";
 		
 		new AlertDialog.Builder(this)
 	    .setTitle("InformaCam PixelHash")
@@ -90,6 +92,17 @@ public class HashActivity extends Activity {
 		    	sendIntent.setAction(Intent.ACTION_SEND);
 		    	sendIntent.putExtra(Intent.EXTRA_TEXT, hashMessage + hashTag);
 		    	sendIntent.setType("text/plain");
+		    	startActivity(sendIntent);
+		    	HashActivity.this.finish();
+	            
+	        }
+	     })
+	     .setNeutralButton("Search Notary", new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	            // continue with delete
+	        	Intent sendIntent = new Intent();
+		    	sendIntent.setAction(Intent.ACTION_VIEW);
+		    	sendIntent.setData(Uri.parse(searchLink));
 		    	startActivity(sendIntent);
 		    	HashActivity.this.finish();
 	            
