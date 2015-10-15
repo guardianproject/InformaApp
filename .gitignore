@@ -7,3 +7,8 @@ app/project.properties
 app/build.xml
 app/local.properties
 bin/*
+local.properties
+.gradle/
+.idea/
+*.iml
+*/build/

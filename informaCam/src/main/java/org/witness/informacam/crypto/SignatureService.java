@@ -5,7 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Reader;
+import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
 
@@ -30,23 +30,22 @@ import android.content.Context;
 import android.util.Log;
 
 public class SignatureService {
-	
+
 	private PGPSecretKey secretKey = null;
 	private PGPPrivateKey privateKey = null;
 	private PGPPublicKey publicKey = null;
 	private String authKey = null;
-	
+
 	private static String LOG = Crypto.LOG;
-	
-	public SignatureService (Context context)
-	{
-		
-	}
-	
-	
+
+	public SignatureService (Context context) {}
+
+
 	@SuppressWarnings({"deprecation" })
-	public void initKey(ISecretKey sk) throws PGPException {
-		authKey = sk.secretAuthToken;
+	public void initKey(ISecretKey sk) throws PGPException, GeneralSecurityException, IOException {
+		// decrypt secretAuthToken with Android Keystore first.
+		authKey = KeyUtility.unwrapSecretAuthToken(sk.secretAuthToken);
+
 		secretKey = KeyUtility.extractSecretKey(sk.secretKey.getBytes());
 		privateKey = secretKey.extractPrivateKey(authKey.toCharArray(), new BouncyCastleProvider());
 		publicKey = secretKey.getPublicKey();

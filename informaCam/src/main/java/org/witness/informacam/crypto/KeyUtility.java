@@ -5,15 +5,20 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigInteger;
+import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.KeyStore;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.security.Security;
 import java.security.SignatureException;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -45,33 +50,37 @@ import org.spongycastle.openpgp.PGPUtil;
 import org.spongycastle.util.encoders.Hex;
 import org.witness.informacam.InformaCam;
 import org.witness.informacam.json.JSONArray;
-import org.witness.informacam.json.JSONException;
 import org.witness.informacam.json.JSONObject;
 import org.witness.informacam.json.JSONTokener;
 import org.witness.informacam.models.credentials.IKeyStore;
 import org.witness.informacam.models.credentials.ISecretKey;
-import org.witness.informacam.models.notifications.INotification;
 import org.witness.informacam.models.organizations.IOrganization;
 import org.witness.informacam.storage.FormUtility;
 import org.witness.informacam.storage.IOUtility;
+import org.witness.informacam.utils.Constants.Logger;
 import org.witness.informacam.utils.Constants.App;
 import org.witness.informacam.utils.Constants.App.Storage;
 import org.witness.informacam.utils.Constants.App.Storage.Type;
 import org.witness.informacam.utils.Constants.Codes;
 import org.witness.informacam.utils.Constants.IManifest;
-import org.witness.informacam.utils.Constants.Models;
 import org.witness.informacam.utils.Constants.Models.ICredentials;
 import org.witness.informacam.utils.Constants.Models.IUser;
 
 import android.os.Bundle;
 import android.os.Message;
+import android.security.KeyPairGeneratorSpec;
 import android.util.Base64;
 import android.util.Log;
+
+import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.CipherOutputStream;
+import javax.security.auth.x500.X500Principal;
 
 public class KeyUtility {
 
 	private final static String LOG = App.Crypto.LOG;
-	
+
 	public static String getFingerprintFromKey(byte[] keyblock) throws IOException, PGPException {
 		PGPPublicKey key = extractPublicKeyFromBytes(keyblock);
 		return new String(Hex.encode(key.getFingerprint()));
@@ -112,7 +121,7 @@ public class KeyUtility {
 					key = k;
 			}
 		}
-		
+
 		if(key == null) {
 			throw new IllegalArgumentException("there isn't an encryption key here.");
 		}
@@ -132,14 +141,14 @@ public class KeyUtility {
 			product[b] = (byte) (baseBytes[b] ^ randomBytes[b]);
 		}
 
-		// digest to SHA1 string, voila password.
-		MessageDigest md = MessageDigest.getInstance("SHA-1");
-		return Base64.encodeToString(md.digest(product), Base64.DEFAULT);
+		// digest to SHA-256 string, voila password.
+		MessageDigest md = MessageDigest.getInstance("SHA-256");
+		return new String(Hex.encode(md.digest(product)));
 	}
 
 	@SuppressWarnings("deprecation")
 	public static boolean initDevice() {
-	
+
 		int progress = 1;
 		Bundle data = new Bundle();
 		data.putInt(Codes.Extras.MESSAGE_CODE, Codes.Messages.UI.UPDATE);
@@ -152,7 +161,7 @@ public class KeyUtility {
 			@Override
 			public void onCacheWordUninitialized() {
 				if(firstUse) {
-				
+
 					Log.d(LOG, "INIT: onCacheWordUninitialized()");
 
 					try {
@@ -166,17 +175,17 @@ public class KeyUtility {
 				}
 			}
 
-			
+
 			@Override
 			public void onCacheWordOpened() {
 				// there is not credential block, so override this.
 				if(firstUse) {
 					Log.d(LOG, "INIT: onCacheWordOpened()");
-					
+
 					cacheWord.setTimeout(0);
-					
+
 					informaCam.ioService.initIOCipher(cacheWord.getEncryptionKey());
-					
+
 					new Thread ()
 					{
 						public void run ()
@@ -190,10 +199,10 @@ public class KeyUtility {
 				}
 			}
 		});
-		
+
 		return true;
 	}
-	
+
 	private static void initDeviceAsync (InformaCam informaCam, CredentialManager credMgr)
 	{
 		try {
@@ -203,32 +212,32 @@ public class KeyUtility {
 			byte[] baseImageBytes = informaCam.ioService.getBytes(basePath, Storage.Type.INTERNAL_STORAGE);
 
 			authToken = generatePassword(baseImageBytes);
-			
+
 			String authTokenBlobBytes = new String(credMgr.setAuthToken(authToken));
 			JSONObject authTokenBlob = (JSONObject) new JSONTokener(authTokenBlobBytes).nextValue();
 			authTokenBlob.put(ICredentials.PASSWORD_BLOCK, authTokenBlob.getString("value"));
 			authTokenBlob.remove("value");
-			
+
 			initDeviceKeys(authToken, baseImageBytes);
-			
+
 			if(informaCam.ioService.saveBlob(authTokenBlob.toString().getBytes(), new java.io.File(IUser.CREDENTIALS))) {
 				informaCam.user.setHasCredentials(true);
-				
+
 			}
 
 			informaCam.initData();
-			
+
 			for(String s : informaCam.getAssets().list("includedOrganizations")) {
-				
+
 				InputStream ictdIS = informaCam.ioService.getStream("includedOrganizations/" + s, Type.APPLICATION_ASSET);
-				
+
 				byte[] ictdBytes = new byte[ictdIS.available()];
 				ictdIS.read(ictdBytes);
-				
-		
+
+
 				IOrganization organization = informaCam.installICTD((JSONObject) new JSONTokener(new String(ictdBytes)).nextValue(), informaCam.h, informaCam);
 				if(organization != null && !informaCam.user.isInOfflineMode) {
-					
+
 					/*
 					INotification notification = new INotification(informaCam.getResources().getString(R.string.key_sent), informaCam.getResources().etResources().getString(R.string.you_have_sent_your_credentials_to_x, organization.organizationName), Models.INotification.Type.NEW_KEY);
 					notification.taskComplete = false;
@@ -239,8 +248,8 @@ public class KeyUtility {
 				//	TransportUtility.initTransport(transportStub);
 				}
 			}
-			
-		
+
+
 		try {
 			for(String s : informaCam.getAssets().list("includedForms")) {
 				InputStream formXML = informaCam.ioService.getStream("includedForms/" + s, Type.APPLICATION_ASSET);
@@ -250,22 +259,87 @@ public class KeyUtility {
 			Log.e(LOG, e.toString());
 			e.printStackTrace();
 		}
-	
-		
+
+
 		// Tell others we are done!
 		Bundle data = new Bundle();
 		data.putInt(Codes.Extras.MESSAGE_CODE, org.witness.informacam.utils.Constants.Codes.Messages.UI.REPLACE);
-		
+
 		Message message = new Message();
 		message.setData(data);
-		
+
 		informaCam.update(data);
-			
+
 		} catch (Exception e) {
 			Log.e(LOG, e.toString(),e);
 		}
 	}
-	
+
+    public static String unwrapSecretAuthToken(String secretAuthToken) throws GeneralSecurityException, IOException {
+        final KeyStore keyStore = KeyStore.getInstance("AndroidKeyStore");
+        keyStore.load(null);
+
+        final KeyStore.PrivateKeyEntry pke = (KeyStore.PrivateKeyEntry) keyStore.getEntry(ICredentials.PASSWORD_ALIAS, null);
+        final KeyPair keyPair = new KeyPair(pke.getCertificate().getPublicKey(), pke.getPrivateKey());
+
+        final Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", "AndroidOpenSSL");
+        cipher.init(Cipher.DECRYPT_MODE, keyPair.getPrivate());
+
+        CipherInputStream cis = new CipherInputStream(
+                new ByteArrayInputStream(Base64.decode(secretAuthToken.getBytes("UTF-8"), Base64.DEFAULT)), cipher);
+
+        ArrayList<Byte> a_bytes = new ArrayList<Byte>();
+        int next;
+        while ((next = cis.read()) != -1) {
+            a_bytes.add((byte) next);
+        }
+
+        byte[] bytes = new byte[a_bytes.size()];
+        for(int b=0; b<bytes.length; b++) {
+            bytes[b] = a_bytes.get(b).byteValue();
+        }
+
+        return new String(bytes, 0, bytes.length, "UTF-8");
+    }
+
+    private static String wrapSecretAuthToken(String secretAuthToken) throws GeneralSecurityException, IOException {
+        // encrypt to Android Keystore first.
+
+        final Calendar start = new GregorianCalendar();
+        final Calendar end = new GregorianCalendar();
+        end.add(Calendar.YEAR, 100);
+
+        final KeyStore keyStore = KeyStore.getInstance("AndroidKeyStore");
+        keyStore.load(null);
+
+        final KeyPairGeneratorSpec kpgSpec = new KeyPairGeneratorSpec.Builder(InformaCam.getInstance())
+                .setAlias(ICredentials.PASSWORD_ALIAS)
+                .setSubject(new X500Principal(String.format("CN=%s", ICredentials.PASSWORD_ALIAS)))
+                .setSerialNumber(BigInteger.ONE)
+                .setStartDate(start.getTime())
+                .setEndDate(end.getTime()).build();
+
+        final KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA", "AndroidKeyStore");
+        kpg.initialize(kpgSpec);
+        kpg.generateKeyPair();
+
+        final KeyStore.PrivateKeyEntry pke = (KeyStore.PrivateKeyEntry) keyStore.getEntry(ICredentials.PASSWORD_ALIAS, null);
+        final KeyPair keyPair = new KeyPair(pke.getCertificate().getPublicKey(), pke.getPrivateKey());
+
+        final Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", "AndroidOpenSSL");
+        cipher.init(Cipher.ENCRYPT_MODE, keyPair.getPublic());
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        CipherOutputStream cos = new CipherOutputStream(baos, cipher);
+        cos.write(secretAuthToken.getBytes("UTF-8"));
+        cos.close();
+
+        byte[] secretAuthTokenBytes = baos.toByteArray();
+        baos.close();
+
+        return Base64.encodeToString(secretAuthTokenBytes, Base64.DEFAULT);
+    }
+
 	private static boolean initDeviceKeys (String authToken, byte[] baseImageBytes)
 	{
 		InformaCam informaCam = InformaCam.getInstance();
@@ -276,44 +350,42 @@ public class KeyUtility {
 		data.putInt(Codes.Keys.UI.PROGRESS, progress);
 
 		try {
-			
+
 			String secretAuthToken, keyStorePassword;
 
-			progress += 10;
-			data.putInt(Codes.Keys.UI.PROGRESS, progress);
+            progress += 10;
+            data.putInt(Codes.Keys.UI.PROGRESS, progress);
 			informaCam.update(data);
 
-			secretAuthToken = generatePassword(baseImageBytes);
+            secretAuthToken = generatePassword(baseImageBytes);
 			keyStorePassword = generatePassword(baseImageBytes);
-			
+
 			// TODO: set up anonymization vector here
-			
+
 			baseImageBytes = null;
 
-			//informaCam.ioService.initIOCipher(authToken);
+			progress += 10;
+			data.putInt(Codes.Keys.UI.PROGRESS, progress);
+			informaCam.update(data);
+
 
 			progress += 10;
 			data.putInt(Codes.Keys.UI.PROGRESS, progress);
 			informaCam.update(data);
-			
-			
-			progress += 10;
-			data.putInt(Codes.Keys.UI.PROGRESS, progress);
-			informaCam.update(data);
-						
+
 			Map<String, InputStream> publicCredentials = new HashMap<String, InputStream>();
 			JSONArray baseImages = informaCam.user.getJSONArray(IUser.PATH_TO_BASE_IMAGE);
 			for(int j=0; j<baseImages.length(); j++) {
-				
+
 				InputStream baseImageStream = informaCam.ioService.getStream(baseImages.getString(j), Storage.Type.INTERNAL_STORAGE);
-				
+
 				info.guardianproject.iocipher.File baseImage = new info.guardianproject.iocipher.File(IUser.BASE_IMAGE + "_" + j);
 				if(informaCam.ioService.saveBlob(baseImageStream, baseImage)) {
 					informaCam.ioService.delete(baseImages.getString(j), Storage.Type.INTERNAL_STORAGE);
 					publicCredentials.put(IUser.BASE_IMAGE + "_" + j, informaCam.ioService.getStream(baseImage.getAbsolutePath(), Storage.Type.IOCIPHER));
 				}
 			}
-			
+
 			informaCam.user.remove(IUser.PATH_TO_BASE_IMAGE);
 
 			progress += 10;
@@ -372,7 +444,7 @@ public class KeyUtility {
 
 			ISecretKey secretKeyPackage = new ISecretKey();
 			secretKeyPackage.pgpKeyFingerprint = pgpKeyFingerprint;
-			secretKeyPackage.secretAuthToken = secretAuthToken;
+			secretKeyPackage.secretAuthToken = wrapSecretAuthToken(secretAuthToken);
 			secretKeyPackage.secretKey = Base64.encodeToString(secret.getEncoded(), Base64.DEFAULT);
 
 			progress += 10;
