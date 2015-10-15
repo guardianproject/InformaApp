@@ -150,7 +150,7 @@ public class KeyUtility {
 	public static boolean initDevice() {
 
 		int progress = 1;
-		Bundle data = new Bundle();
+        Bundle data = new Bundle();
 		data.putInt(Codes.Extras.MESSAGE_CODE, Codes.Messages.UI.UPDATE);
 		data.putInt(Codes.Keys.UI.PROGRESS, progress);
 
@@ -302,7 +302,15 @@ public class KeyUtility {
         return new String(bytes, 0, bytes.length, "UTF-8");
     }
 
-    private static String wrapSecretAuthToken(String secretAuthToken) throws GeneralSecurityException, IOException {
+    public static boolean checkForLegacyAuthToken(String secretAuthToken) {
+        if(secretAuthToken.length() <= 44) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static String wrapSecretAuthToken(String secretAuthToken) throws GeneralSecurityException, IOException {
         // encrypt to Android Keystore first.
 
         final Calendar start = new GregorianCalendar();
@@ -349,9 +357,9 @@ public class KeyUtility {
 		data.putInt(Codes.Extras.MESSAGE_CODE, Codes.Messages.UI.UPDATE);
 		data.putInt(Codes.Keys.UI.PROGRESS, progress);
 
-		try {
+        try {
 
-			String secretAuthToken, keyStorePassword;
+            String secretAuthToken, keyStorePassword;
 
             progress += 10;
             data.putInt(Codes.Keys.UI.PROGRESS, progress);
@@ -445,7 +453,7 @@ public class KeyUtility {
 			ISecretKey secretKeyPackage = new ISecretKey();
 			secretKeyPackage.pgpKeyFingerprint = pgpKeyFingerprint;
 			secretKeyPackage.secretAuthToken = wrapSecretAuthToken(secretAuthToken);
-			secretKeyPackage.secretKey = Base64.encodeToString(secret.getEncoded(), Base64.DEFAULT);
+            secretKeyPackage.secretKey = Base64.encodeToString(secret.getEncoded(), Base64.DEFAULT);
 
 			progress += 10;
 			data.putInt(Codes.Keys.UI.PROGRESS, progress);
