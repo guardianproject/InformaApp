@@ -531,6 +531,7 @@ public class Constants {
 
 		public class ICredentials {
 			public final static String PASSWORD_BLOCK = "passwordBlock";
+			public final static String PASSWORD_ALIAS = "CameraV1_2";
 		}
 
 		public class IPendingConnections {
